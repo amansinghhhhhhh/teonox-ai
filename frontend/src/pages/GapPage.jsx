@@ -7,17 +7,15 @@ import {
     Briefcase,
     Building2,
     Users,
-    Sparkles,
     Layers,
     Workflow,
     BookOpenCheck,
-    ArrowRight,
     CheckCircle2,
     ArrowUpRight,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useMasterclass } from '@/components/MasterclassProvider';
-import { TextReveal } from '@/components/gsap/TextReveal';
+import { Typewriter } from '@/components/gsap/Typewriter';
 import { RevealOnScroll } from '@/components/gsap/RevealOnScroll';
 import { MagneticButton } from '@/components/gsap/MagneticButton';
 import { GAP } from '@/constants/testIds';
@@ -27,13 +25,13 @@ const FAILURE_MODES = [
         title: 'Too technical',
         body: 'Half the courses drown you in transformers, embeddings and Python. Great if you’re becoming an ML engineer — useless if you just want to do your job better.',
         icon: XCircle,
-        accent: '#F43F5E',
+        accent: '#E11D48',
     },
     {
         title: 'Too shallow',
         body: 'The other half show you ChatGPT screenshots and call it a day. You finish, feel inspired — but still can’t do real work with it on Monday.',
         icon: AlertOctagon,
-        accent: '#F59E0B',
+        accent: '#D97706',
     },
 ];
 
@@ -84,21 +82,23 @@ export default function GapPage() {
         <div data-testid={GAP.page} className="section-deep">
             {/* HERO */}
             <section className="relative overflow-hidden pt-20 sm:pt-24 pb-12 sm:pb-16">
-                <div className="orb orb-orange" style={{ width: 500, height: 500, top: -180, right: -120, opacity: 0.35 }} />
-                <div className="orb orb-cyan" style={{ width: 360, height: 360, top: '20%', left: -120, opacity: 0.25 }} />
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
                     <div className="lg:col-span-8">
-                        <Badge className="bg-[#FF6A00] hover:bg-[#FF6A00] text-white border-0">The Gap</Badge>
-                        <TextReveal
+                        <Badge className="bg-[#E85F00] hover:bg-[#E85F00] text-white border-0">The Gap</Badge>
+                        <Typewriter
                             as="h1"
                             text="Most AI courses are"
-                            className="font-display mt-5 text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight text-white"
+                            className="font-display mt-5 block text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight text-white"
+                            speed={30}
+                            caret={false}
                         />
-                        <TextReveal
+                        <Typewriter
                             as="h1"
                             text="half-complete."
-                            className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight gradient-orange-text"
-                            delay={0.18}
+                            className="font-display block text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight gradient-orange-text"
+                            speed={30}
+                            startDelay={600}
+                            trailingCaret
                         />
                         <p className="mt-6 text-ink-2 text-base sm:text-lg max-w-2xl">
                             Either they drown you in tools, or they skip the workflows real companies use. We know how the
@@ -107,7 +107,7 @@ export default function GapPage() {
                         </p>
                     </div>
                     <div className="lg:col-span-4">
-                        <div className="rounded-2xl card-glass p-5">
+                        <div className="rounded-2xl card-elev p-5">
                             <p className="text-ink-3 text-xs uppercase tracking-[0.2em]">A line we keep saying</p>
                             <p className="mt-3 font-display text-xl text-white leading-snug">
                                 “You don&apos;t need more tools. You need a workflow.”
@@ -124,10 +124,9 @@ export default function GapPage() {
                         {FAILURE_MODES.map((f) => {
                             const Icon = f.icon;
                             return (
-                                <div key={f.title} className="relative rounded-3xl card-elev p-6 sm:p-8 overflow-hidden">
-                                    <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ background: `radial-gradient(circle at 80% 0%, ${f.accent}55, transparent 60%)` }} />
+                                <div key={f.title} className="relative rounded-3xl card-elev p-6 sm:p-8">
                                     <div className="relative z-10 flex items-center gap-3">
-                                        <div className="w-11 h-11 rounded-2xl grid place-items-center" style={{ background: f.accent + '22', color: f.accent, border: `1px solid ${f.accent}55` }}>
+                                        <div className="w-11 h-11 rounded-2xl grid place-items-center" style={{ background: f.accent + '1F', color: f.accent, border: `1px solid ${f.accent}55` }}>
                                             <Icon className="w-5 h-5" />
                                         </div>
                                         <h3 className="font-display text-2xl font-semibold text-white">{f.title}</h3>
@@ -147,8 +146,8 @@ export default function GapPage() {
                             <div className="p-6 border-b md:border-b-0 md:border-r border-white/8">
                                 <div className="text-xs uppercase tracking-[0.2em] text-ink-3">Other courses</div>
                             </div>
-                            <div className="p-6 bg-[#FF6A00]/5">
-                                <div className="text-xs uppercase tracking-[0.2em] text-[#FF8A3D]">Teonox.ai</div>
+                            <div className="p-6 bg-[#E85F00]/8">
+                                <div className="text-xs uppercase tracking-[0.2em] text-[#FF7A1A]">Teonox.ai</div>
                             </div>
                         </div>
                         {[
@@ -165,8 +164,8 @@ export default function GapPage() {
                                     <XCircle className="w-4 h-4 text-rose-400 shrink-0" />
                                     {row.a}
                                 </div>
-                                <div className="p-5 text-white text-sm flex items-center gap-2 bg-[#FF6A00]/5">
-                                    <span className="md:hidden text-xs uppercase tracking-[0.18em] text-[#FF8A3D] mr-2">Teonox</span>
+                                <div className="p-5 text-white text-sm flex items-center gap-2 bg-[#E85F00]/6">
+                                    <span className="md:hidden text-xs uppercase tracking-[0.18em] text-[#FF7A1A] mr-2">Teonox</span>
                                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                                     {row.b}
                                 </div>
@@ -176,10 +175,12 @@ export default function GapPage() {
 
                     {/* What Teonox does */}
                     <div className="mt-16">
-                        <TextReveal
+                        <Typewriter
                             as="h2"
                             text="What Teonox does differently."
-                            className="font-display text-2xl sm:text-4xl font-bold text-white leading-tight"
+                            className="font-display block text-2xl sm:text-4xl font-bold text-white leading-tight"
+                            speed={25}
+                            trailingCaret
                         />
                         <RevealOnScroll className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
                             {TEONOX_DOES.map((d) => {
@@ -202,38 +203,37 @@ export default function GapPage() {
             {/* AUDIENCE BENTO */}
             <section className="section-deep py-20 sm:py-24">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <p className="text-xs uppercase tracking-[0.22em] text-[#FF8A3D]">Built for you</p>
-                    <TextReveal
+                    <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">Built for you</p>
+                    <Typewriter
                         as="h2"
                         text="Whoever you are — we have a path."
-                        className="font-display mt-3 text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight"
+                        className="font-display mt-3 block text-3xl sm:text-5xl font-bold text-white leading-tight tracking-tight"
+                        speed={28}
+                        trailingCaret
                     />
                     <RevealOnScroll data-testid={GAP.audienceCards} className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {AUDIENCES.map((a) => {
                             const Icon = a.icon;
                             return (
-                                <div key={a.key} className="rounded-3xl card-elev p-6 sm:p-8 tilt overflow-hidden relative">
-                                    <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-[#FF6A00]/10 blur-2xl" />
-                                    <div className="relative z-10">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-2xl bg-[#FF6A00]/12 text-[#FF8A3D] grid place-items-center border border-white/8">
-                                                <Icon className="w-5 h-5" />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-display text-xl sm:text-2xl font-semibold text-white">{a.title}</h3>
-                                                <p className="text-sm text-[#FF8A3D] font-medium">{a.line}</p>
-                                            </div>
+                                <div key={a.key} className="rounded-3xl card-elev p-6 sm:p-8 tilt">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#E85F00]/12 text-[#FF7A1A] grid place-items-center border border-white/8">
+                                            <Icon className="w-5 h-5" />
                                         </div>
-                                        <p className="mt-4 text-ink-2">{a.body}</p>
-                                        <ul className="mt-4 space-y-2">
-                                            {a.bullets.map((b, i) => (
-                                                <li key={i} className="text-sm text-ink-1 flex gap-2">
-                                                    <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-400" />
-                                                    {b}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        <div>
+                                            <h3 className="font-display text-xl sm:text-2xl font-semibold text-white">{a.title}</h3>
+                                            <p className="text-sm text-[#FF7A1A] font-medium">{a.line}</p>
+                                        </div>
                                     </div>
+                                    <p className="mt-4 text-ink-2">{a.body}</p>
+                                    <ul className="mt-4 space-y-2">
+                                        {a.bullets.map((b, i) => (
+                                            <li key={i} className="text-sm text-ink-1 flex gap-2">
+                                                <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-400" />
+                                                {b}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             );
                         })}
@@ -244,9 +244,8 @@ export default function GapPage() {
             {/* CTA */}
             <section className="section-night py-16 sm:py-20">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12 relative overflow-hidden noise-overlay">
-                        <div className="orb orb-orange" style={{ width: 380, height: 380, top: -160, right: -120 }} />
-                        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                             <div className="lg:col-span-8">
                                 <h3 className="font-display text-2xl sm:text-4xl font-bold text-white">
                                     Tell us your goal. We&apos;ll build you a path.
@@ -257,8 +256,7 @@ export default function GapPage() {
                             </div>
                             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3">
                                 <Link to="/courses" className="sm:flex-1 lg:flex-none">
-                                    <button type="button" className="w-full h-12 inline-flex items-center justify-center gap-2 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl btn-orange-glow font-semibold">
-                                        <Sparkles className="w-4 h-4" />
+                                    <button type="button" className="w-full h-12 inline-flex items-center justify-center gap-2 bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl btn-orange-glow font-semibold">
                                         Start AI Consultant
                                     </button>
                                 </Link>

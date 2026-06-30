@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Sparkles, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TeonoxLogo } from './TeonoxLogo';
 import { NAV } from '@/constants/testIds';
@@ -69,9 +69,8 @@ export const Header = ({ onOpenMasterclass }) => {
                         type="button"
                         data-testid={NAV.headerCta}
                         onClick={onOpenMasterclass}
-                        className="hidden sm:inline-flex items-center gap-2 group rounded-xl bg-[#FF6A00] hover:bg-[#FF8226] active:bg-[#E85F00] text-white px-4 py-2.5 text-sm font-semibold transition-colors btn-orange-glow"
+                        className="hidden sm:inline-flex items-center gap-2 group rounded-xl bg-[#E85F00] hover:bg-[#FF7A1A] active:bg-[#C95300] text-white px-4 py-2.5 text-sm font-semibold transition-colors btn-orange-glow"
                     >
-                        <Sparkles className="w-4 h-4" />
                         <span>Free Masterclass</span>
                         <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </button>
@@ -119,9 +118,8 @@ export const Header = ({ onOpenMasterclass }) => {
                                     setMobileOpen(false);
                                     onOpenMasterclass?.();
                                 }}
-                                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl px-4 py-3 font-semibold"
+                                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl px-4 py-3 font-semibold"
                             >
-                                <Sparkles className="w-4 h-4" />
                                 Join Free Masterclass
                             </button>
                         </nav>

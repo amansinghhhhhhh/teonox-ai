@@ -13,7 +13,7 @@ export const ChatBubble = ({ role, children }) => {
             className={cn('flex items-start gap-2 w-full', isUser ? 'justify-end' : 'justify-start')}
         >
             {!isUser && (
-                <div className="shrink-0 w-7 h-7 rounded-full bg-[#FF6A00]/15 text-[#FF8A3D] grid place-items-center mt-1 border border-[#FF6A00]/30">
+                <div className="shrink-0 w-7 h-7 rounded-full bg-[#E85F00]/15 text-[#FF7A1A] grid place-items-center mt-1 border border-[#E85F00]/30">
                     <Sparkles className="w-3.5 h-3.5" />
                 </div>
             )}
@@ -21,7 +21,7 @@ export const ChatBubble = ({ role, children }) => {
                 className={cn(
                     'max-w-[85%] sm:max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-[0_2px_10px_rgba(0,0,0,0.3)] whitespace-pre-wrap',
                     isUser
-                        ? 'bg-[#FF6A00] text-white rounded-tr-md'
+                        ? 'bg-[#E85F00] text-white rounded-tr-md'
                         : 'bg-white/5 text-ink-1 border border-white/10 rounded-tl-md backdrop-blur',
                 )}
             >
@@ -38,7 +38,7 @@ export const ChatBubble = ({ role, children }) => {
 
 export const TypingBubble = () => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-start gap-2">
-        <div className="shrink-0 w-7 h-7 rounded-full bg-[#FF6A00]/15 text-[#FF8A3D] grid place-items-center mt-1 border border-[#FF6A00]/30">
+        <div className="shrink-0 w-7 h-7 rounded-full bg-[#E85F00]/15 text-[#FF7A1A] grid place-items-center mt-1 border border-[#E85F00]/30">
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
         </div>
         <div className="bg-white/5 text-ink-2 border border-white/10 rounded-2xl rounded-tl-md px-3.5 py-2.5 text-sm backdrop-blur">

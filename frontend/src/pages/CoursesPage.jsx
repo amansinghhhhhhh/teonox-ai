@@ -6,7 +6,7 @@ import { getCourses } from '@/lib/api';
 import { COURSES } from '@/constants/testIds';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, Bot } from 'lucide-react';
-import { TextReveal } from '@/components/gsap/TextReveal';
+import { Typewriter } from '@/components/gsap/Typewriter';
 import { RevealOnScroll } from '@/components/gsap/RevealOnScroll';
 
 export default function CoursesPage() {
@@ -25,20 +25,23 @@ export default function CoursesPage() {
 
     return (
         <div data-testid={COURSES.page} className="section-deep">
-            <section className="relative overflow-hidden pt-20 sm:pt-24 pb-8 sm:pb-10">
-                <div className="orb orb-orange" style={{ width: 460, height: 460, top: -200, right: -120, opacity: 0.3 }} />
+            <section className="pt-20 sm:pt-24 pb-8 sm:pb-10">
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Badge className="bg-[#FF6A00] hover:bg-[#FF6A00] text-white border-0">Explore Courses</Badge>
-                    <TextReveal
+                    <Badge className="bg-[#E85F00] hover:bg-[#E85F00] text-white border-0">Explore Courses</Badge>
+                    <Typewriter
                         as="h1"
                         text="Not a library."
-                        className="font-display mt-5 text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.98] tracking-tight"
+                        className="font-display mt-5 block text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.98] tracking-tight"
+                        speed={30}
+                        caret={false}
                     />
-                    <TextReveal
+                    <Typewriter
                         as="h1"
                         text="Your AI counsellor."
-                        className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight gradient-orange-text"
-                        delay={0.18}
+                        className="font-display block text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight gradient-orange-text"
+                        speed={30}
+                        startDelay={420}
+                        trailingCaret
                     />
                     <p className="text-ink-2 mt-5 max-w-2xl text-base sm:text-lg">
                         Have a 60-second chat. Watch the right course rise to the top — with a clear match % and a single
@@ -53,14 +56,14 @@ export default function CoursesPage() {
                         <TabsList className="bg-white/5 border border-white/8 rounded-xl p-1">
                             <TabsTrigger
                                 value="consultant"
-                                className="data-[state=active]:bg-[#FF6A00] data-[state=active]:text-white text-white/70 rounded-lg px-4"
+                                className="data-[state=active]:bg-[#E85F00] data-[state=active]:text-white text-white/70 rounded-lg px-4"
                             >
                                 <Bot className="w-4 h-4 mr-2" />
                                 AI Consultant
                             </TabsTrigger>
                             <TabsTrigger
                                 value="library"
-                                className="data-[state=active]:bg-[#FF6A00] data-[state=active]:text-white text-white/70 rounded-lg px-4"
+                                className="data-[state=active]:bg-[#E85F00] data-[state=active]:text-white text-white/70 rounded-lg px-4"
                             >
                                 <BookOpen className="w-4 h-4 mr-2" />
                                 Full Library

@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
-import { CheckCircle2, Sparkles, Loader2, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, Loader2, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { AUDIENCE_OPTIONS } from '@/lib/courses';
 import { createLead } from '@/lib/api';
@@ -66,10 +66,9 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                 data-testid={MASTERCLASS.drawer}
                 className="sm:max-w-lg p-0 overflow-hidden rounded-3xl border border-white/10 bg-card text-ink-1"
             >
-                <div className="relative px-6 pt-6 pb-4" style={{ background: 'radial-gradient(600px circle at 30% -20%, rgba(255,106,0,0.25), transparent 60%)' }}>
+                <div className="relative px-6 pt-6 pb-4 bg-[#080E22] border-b border-white/8">
                     <DialogHeader className="text-left">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-[#FF6A00]/15 text-[#FFB872] border border-[#FF6A00]/30 px-3 py-1 text-xs font-medium w-max">
-                            <Sparkles className="w-3.5 h-3.5" />
+                        <div className="inline-flex items-center gap-2 rounded-full bg-[#E85F00]/15 text-[#FFA362] border border-[#E85F00]/30 px-3 py-1 text-xs font-medium w-max">
                             Free live masterclass
                         </div>
                         <DialogTitle className="font-display text-2xl sm:text-3xl mt-3 text-white">
@@ -100,7 +99,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 <p className="text-ink-2 mt-2">
                                     {'We\u2019ll WhatsApp you the joining link + \u20b950k resources before the live class.'}
                                 </p>
-                                <Button onClick={() => handleOpenChange(false)} className="mt-5 bg-white text-[#0B0F14] hover:bg-[#FFB872] rounded-xl">
+                                <Button onClick={() => handleOpenChange(false)} className="mt-5 bg-white text-[#0B0F14] hover:bg-[#FFA362] rounded-xl">
                                     Close
                                 </Button>
                             </motion.div>
@@ -168,7 +167,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                                 onClick={() => update('audience_type', opt.value)}
                                                 className={`text-left rounded-xl border px-3 py-2.5 text-sm transition-colors ${
                                                     form.audience_type === opt.value
-                                                        ? 'border-[#FF6A00] bg-[#FF6A00]/15 text-white'
+                                                        ? 'border-[#E85F00] bg-[#E85F00]/15 text-white'
                                                         : 'border-white/10 bg-white/3 text-ink-1 hover:bg-white/8'
                                                 }`}
                                             >
@@ -200,7 +199,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                     type="submit"
                                     data-testid={MASTERCLASS.submitButton}
                                     disabled={submitting}
-                                    className="w-full h-12 bg-[#FF6A00] hover:bg-[#FF8226] active:bg-[#E85F00] text-white rounded-xl text-base font-semibold btn-orange-glow"
+                                    className="w-full h-12 bg-[#E85F00] hover:bg-[#FF7A1A] active:bg-[#E85F00] text-white rounded-xl text-base font-semibold btn-orange-glow"
                                 >
                                     {submitting ? (
                                         <>
@@ -208,10 +207,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                             Reserving your seat…
                                         </>
                                     ) : (
-                                        <>
-                                            <Sparkles className="w-4 h-4 mr-2" />
-                                            Reserve my free seat
-                                        </>
+                                        <>Reserve my free seat</>
                                     )}
                                 </Button>
                             </motion.form>

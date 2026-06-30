@@ -65,7 +65,7 @@ export const HeroOrbBackground = ({ className = '', dense = false }) => {
         const draw = () => {
             const { w, h, mouseX, mouseY } = stateRef.current;
             ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = '#060B1A';
+            ctx.fillStyle = '#030712';
             ctx.fillRect(0, 0, w, h);
 
             let cx = mouseX;
@@ -103,9 +103,9 @@ export const HeroOrbBackground = ({ className = '', dense = false }) => {
 
             if (cx > -1000) {
                 const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 220);
-                grad.addColorStop(0, 'rgba(255, 106, 0, 0.18)');
-                grad.addColorStop(0.5, 'rgba(255, 106, 0, 0.05)');
-                grad.addColorStop(1, 'rgba(255, 106, 0, 0)');
+                grad.addColorStop(0, 'rgba(232, 95, 0, 0.18)');
+                grad.addColorStop(0.5, 'rgba(232, 95, 0, 0.05)');
+                grad.addColorStop(1, 'rgba(232, 95, 0, 0)');
                 ctx.fillStyle = grad;
                 ctx.beginPath();
                 ctx.arc(cx, cy, 220, 0, Math.PI * 2);
@@ -135,7 +135,7 @@ export const HeroOrbBackground = ({ className = '', dense = false }) => {
             className={`pointer-events-none absolute inset-0 overflow-hidden bg-deep ${className}`}
         >
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#060B1A]" />
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#030712]" />
         </div>
     );
 };

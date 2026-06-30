@@ -89,7 +89,7 @@ export const CourseConsultant = ({ courses = [] }) => {
                 <div className="rounded-3xl card-elev overflow-hidden flex flex-col min-h-[540px]">
                     <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-white/8 bg-[#0B1334]">
                         <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-[#FF6A00]/15 text-[#FF8A3D] grid place-items-center border border-[#FF6A00]/30">
+                            <div className="w-7 h-7 rounded-full bg-[#E85F00]/15 text-[#FF7A1A] grid place-items-center border border-[#E85F00]/30">
                                 <Sparkles className="w-3.5 h-3.5" />
                             </div>
                             <div>
@@ -129,7 +129,7 @@ export const CourseConsultant = ({ courses = [] }) => {
                                             onClick={() => setAudience(opt.value)}
                                             className={`text-left rounded-xl border px-4 py-3 transition-colors ${
                                                 audience === opt.value
-                                                    ? 'border-[#FF6A00] bg-[#FF6A00]/10 text-white'
+                                                    ? 'border-[#E85F00] bg-[#E85F00]/10 text-white'
                                                     : 'border-white/10 bg-white/3 text-ink-1 hover:bg-white/8'
                                             }`}
                                         >
@@ -146,14 +146,14 @@ export const CourseConsultant = ({ courses = [] }) => {
                                         value={specialization}
                                         onChange={(e) => setSpecialization(e.target.value)}
                                         placeholder="e.g. digital marketing, BCom 2nd year, D2C brand owner"
-                                        className="w-full h-12 rounded-xl border border-white/12 bg-white/5 text-white placeholder:text-ink-3 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6A00]/40"
+                                        className="w-full h-12 rounded-xl border border-white/12 bg-white/5 text-white placeholder:text-ink-3 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E85F00]/40"
                                     />
                                 </div>
 
                                 <Button
                                     data-testid={COURSES.audienceContinue}
                                     onClick={startChat}
-                                    className="mt-5 w-full sm:w-auto bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl px-5 h-12 btn-orange-glow"
+                                    className="mt-5 w-full sm:w-auto bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl px-5 h-12 btn-orange-glow"
                                 >
                                     Start chat
                                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -209,7 +209,7 @@ export const CourseConsultant = ({ courses = [] }) => {
                                             data-testid={COURSES.chatSend}
                                             disabled={busy || !input.trim()}
                                             onClick={() => sendTurn(input)}
-                                            className="h-11 px-4 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl btn-orange-glow"
+                                            className="h-11 px-4 bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl btn-orange-glow"
                                         >
                                             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                         </Button>
@@ -271,7 +271,7 @@ export const CourseConsultant = ({ courses = [] }) => {
                                     )}
 
                                     <div className="mt-3 flex items-center justify-end">
-                                        <button type="button" onClick={() => openMasterclass('consultant_card_' + c.id)} className="text-xs font-semibold text-[#FF8A3D] hover:text-[#FFB872] inline-flex items-center gap-1">
+                                        <button type="button" onClick={() => openMasterclass('consultant_card_' + c.id)} className="text-xs font-semibold text-[#FF7A1A] hover:text-[#FFA362] inline-flex items-center gap-1">
                                             Reserve seat
                                             <ChevronRight className="w-3.5 h-3.5" />
                                         </button>

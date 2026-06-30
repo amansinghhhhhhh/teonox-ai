@@ -87,7 +87,7 @@ export const JobRiskChat = ({ courses = [] }) => {
                 <div className="rounded-3xl card-elev overflow-hidden flex flex-col min-h-[540px]">
                     <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-white/8 bg-[#0B1334]">
                         <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-[#FF6A00]/15 text-[#FF8A3D] grid place-items-center border border-[#FF6A00]/30">
+                            <div className="w-7 h-7 rounded-full bg-[#E85F00]/15 text-[#FF7A1A] grid place-items-center border border-[#E85F00]/30">
                                 <Sparkles className="w-3.5 h-3.5" />
                             </div>
                             <div>
@@ -112,7 +112,7 @@ export const JobRiskChat = ({ courses = [] }) => {
                                     value={role}
                                     onChange={(e) => setRole(e.target.value)}
                                     placeholder="e.g. Social media manager at a small agency"
-                                    className="mt-4 w-full h-12 rounded-xl border border-white/12 bg-white/5 text-white placeholder:text-ink-3 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6A00]/40"
+                                    className="mt-4 w-full h-12 rounded-xl border border-white/12 bg-white/5 text-white placeholder:text-ink-3 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#E85F00]/40"
                                 />
                                 <div className="mt-3 flex flex-wrap gap-2">
                                     {SAMPLE_ROLES.map((r) => (
@@ -121,7 +121,7 @@ export const JobRiskChat = ({ courses = [] }) => {
                                         </button>
                                     ))}
                                 </div>
-                                <Button onClick={startChat} disabled={!role.trim()} className="mt-5 w-full sm:w-auto bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl px-5 h-12 btn-orange-glow">
+                                <Button onClick={startChat} disabled={!role.trim()} className="mt-5 w-full sm:w-auto bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl px-5 h-12 btn-orange-glow">
                                     Begin honest assessment
                                     <ArrowRight className="w-4 h-4 ml-2" />
                                 </Button>
@@ -154,7 +154,7 @@ export const JobRiskChat = ({ courses = [] }) => {
                                             rows={1}
                                             className="min-h-[44px] max-h-[140px] rounded-xl resize-none bg-white/5 border-white/12 text-white placeholder:text-ink-3"
                                         />
-                                        <Button data-testid={JOBRISK.chatSend} disabled={busy || !input.trim()} onClick={() => sendTurn(input)} className="h-11 px-4 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl btn-orange-glow">
+                                        <Button data-testid={JOBRISK.chatSend} disabled={busy || !input.trim()} onClick={() => sendTurn(input)} className="h-11 px-4 bg-[#E85F00] hover:bg-[#FF7A1A] text-white rounded-xl btn-orange-glow">
                                             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                         </Button>
                                     </div>
@@ -223,7 +223,7 @@ export const JobRiskChat = ({ courses = [] }) => {
                                             key={i}
                                             type="button"
                                             onClick={() => openMasterclass('jobrisk_rec_' + r.course_id)}
-                                            className="text-left w-full rounded-xl border border-white/10 hover:border-[#FF6A00]/40 bg-white/5 hover:bg-white/8 p-3 transition-colors"
+                                            className="text-left w-full rounded-xl border border-white/10 hover:border-[#E85F00]/40 bg-white/5 hover:bg-white/8 p-3 transition-colors"
                                         >
                                             <div className="text-sm font-semibold text-white">{c.title}</div>
                                             <div className="text-xs text-ink-2 mt-1">{r.why}</div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TeonoxLogo } from './TeonoxLogo';
 import { NAV } from '@/constants/testIds';
-import { Mail, MessageCircle, MapPin, Sparkles, ArrowUpRight } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, ArrowUpRight } from 'lucide-react';
 
 const LINKS = [
     { label: 'Home', to: '/' },
@@ -15,19 +15,17 @@ const LINKS = [
 export const Footer = ({ onOpenMasterclass }) => {
     return (
         <footer data-testid={NAV.footer} className="relative section-deep border-t border-white/8 noise-overlay">
-            <div className="orb orb-orange" style={{ width: 460, height: 460, top: -160, left: -180, opacity: 0.35 }} />
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
                 {/* Big closing line */}
                 <div className="max-w-3xl">
-                    <p className="text-xs uppercase tracking-[0.22em] text-[#FF8A3D]">Learn. Apply. Lead.</p>
+                    <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">Learn. Apply. Lead.</p>
                     <h2 className="font-display mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.05] text-white">
                         AI seekhna hai. <span className="gradient-orange-text">Asli kaam karna hai.</span>
                     </h2>
                     <button
                         onClick={onOpenMasterclass}
-                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#FF6A00] hover:bg-[#FF8226] px-6 py-3.5 text-white font-semibold btn-orange-glow"
+                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#E85F00] hover:bg-[#FF7A1A] px-6 py-3.5 text-white font-semibold btn-orange-glow"
                     >
-                        <Sparkles className="w-4 h-4" />
                         Join Free Masterclass
                         <ArrowUpRight className="w-4 h-4" />
                     </button>
@@ -42,7 +40,7 @@ export const Footer = ({ onOpenMasterclass }) => {
                         'Claude Sonnet 4.5 powered',
                     ].map((t) => (
                         <div key={t} className="flex items-center gap-2 text-sm text-white/70">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF6A00]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#E85F00]" />
                             {t}
                         </div>
                     ))}
@@ -74,15 +72,15 @@ export const Footer = ({ onOpenMasterclass }) => {
                         <div className="text-xs uppercase tracking-[0.18em] text-white/45 mb-4">Contact</div>
                         <ul className="space-y-3 text-white/75">
                             <li className="flex items-center gap-3">
-                                <Mail className="w-4 h-4 text-[#FF6A00]" />
+                                <Mail className="w-4 h-4 text-[#FF7A1A]" />
                                 hello@teonox.ai
                             </li>
                             <li className="flex items-center gap-3">
-                                <MessageCircle className="w-4 h-4 text-[#FF6A00]" />
+                                <MessageCircle className="w-4 h-4 text-[#FF7A1A]" />
                                 WhatsApp +91-XXXXX-XXXXX
                             </li>
                             <li className="flex items-center gap-3">
-                                <MapPin className="w-4 h-4 text-[#FF6A00]" />
+                                <MapPin className="w-4 h-4 text-[#FF7A1A]" />
                                 Remote-first · India
                             </li>
                         </ul>
