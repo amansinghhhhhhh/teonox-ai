@@ -1,0 +1,558 @@
+{
+  "timestamp": "2026-06-30T08:15:36.388749",
+  "total": 12,
+  "passed": 14,
+  "failed": -2,
+  "success_rate": 116.66666666666667,
+  "results": [
+    {
+      "name": "Health check",
+      "endpoint": "/",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "name": "teonox.ai",
+        "status": "ok"
+      }
+    },
+    {
+      "name": "GET /api/courses",
+      "endpoint": "/courses",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "courses": [
+          {
+            "id": "ai-baat-prompt-engg",
+            "title": "AI se Baat Kaise Karte Hai",
+            "subtitle": "Prompt Engineering for Everyone",
+            "level": "Beginner",
+            "duration": "4 weeks",
+            "hours": 14,
+            "price_inr": 2999,
+            "original_price_inr": 4999,
+            "language": "Hinglish",
+            "summary": "Talk to AI like a pro. Frameworks for prompts that get real work done.",
+            "outcomes": [
+              "Master 7 prompt frameworks used in real jobs",
+              "Build a personal prompt library you reuse daily",
+              "Get the same task done 5x faster with AI"
+            ],
+            "modules": [
+              "Why prompts matter (think like a manager, not a typist)",
+              "The 7 frameworks: RACE, CRISP, RTF, COSTAR, CARE, BAB, PAS",
+              "Long-context prompts: feed PDFs, sheets, code, websites",
+              "Workflows: research, writing, summarising, comparing, deciding",
+              "Your personal prompt library + Notion template"
+            ],
+            "audience": [
+              "student",
+              "professional",
+              "business_owner",
+              "parent"
+            ],
+            "icon": "sparkles",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-social-media-marketing",
+            "title": "AI for Social Media Marketing",
+            "subtitle": "Content, scheduling, hooks & analytics with AI",
+            "level": "Beginner",
+            "duration": "6 weeks",
+            "hours": 22,
+            "price_inr": 6999,
+            "original_price_inr": 9999,
+            "language": "Hinglish",
+            "summary": "Automate captions, hooks, scheduling and reels research with AI agents.",
+            "outcomes": [
+              "Run 5 brand pages without burning out",
+              "Build a content engine: hook \u2192 caption \u2192 schedule \u2192 analytics",
+              "Save 15+ hours/week with reusable AI workflows"
+            ],
+            "modules": [
+              "The new SMM operator role (AI does the typing, you decide)",
+              "Hook mining + caption frameworks with Claude / GPT",
+              "Reel research + script-to-shotlist pipeline",
+              "Scheduling + auto-publishing stacks (Buffer/Make/Zapier + AI)",
+              "Analytics: weekly report agent that writes itself",
+              "Capstone: full brand calendar in 3 hours"
+            ],
+            "audience": [
+              "professional",
+              "business_owner",
+              "student"
+            ],
+            "icon": "megaphone",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-branding",
+            "title": "AI for Branding",
+            "subtitle": "Brand voice, identity & assets with AI",
+            "level": "Beginner",
+            "duration": "5 weeks",
+            "hours": 18,
+            "price_inr": 5999,
+            "original_price_inr": 8999,
+            "language": "Hinglish",
+            "summary": "Use AI to design brand voice, taglines, identity systems and assets fast.",
+            "outcomes": [
+              "Define a clear brand voice + style guide",
+              "Generate identity directions in hours, not weeks",
+              "Build a reusable brand kit with AI assets"
+            ],
+            "modules": [
+              "Brand strategy basics for the AI era",
+              "Voice + tone with AI: prompts that don\u2019t sound robotic",
+              "Identity exploration with image models",
+              "Logo refinement workflow (AI + Figma)",
+              "Brand kit: templates, social, packaging mockups"
+            ],
+            "audience": [
+              "business_owner",
+              "professional",
+              "student"
+            ],
+            "icon": "palette",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-ui-ux",
+            "title": "AI for UI/UX",
+            "subtitle": "Wireframes, prototypes & design systems with AI",
+            "level": "Intermediate",
+            "duration": "6 weeks",
+            "hours": 24,
+            "price_inr": 7999,
+            "original_price_inr": 11999,
+            "language": "Hinglish",
+            "summary": "Ship beautiful UI with AI co-pilots, design systems and rapid prototypes.",
+            "outcomes": [
+              "Move from sketch \u2192 prototype 10x faster",
+              "Use v0 / Cursor / Figma AI in real product flow",
+              "Build a job-ready portfolio piece"
+            ],
+            "modules": [
+              "The new designer role (orchestrator, not pixel-pusher)",
+              "Wireframing with AI (briefs \u2192 layouts)",
+              "Component-driven design systems",
+              "Prototyping with v0 / Lovable / Bolt",
+              "Hand-off + dev collaboration",
+              "Portfolio capstone"
+            ],
+            "audience": [
+              "student",
+              "professional"
+            ],
+            "icon": "layers",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-digital-marketing",
+            "title": "AI for Digital Marketing",
+            "subtitle": "Funnels, ads, email & automations with AI",
+            "level": "Intermediate",
+            "duration": "8 weeks",
+            "hours": 30,
+            "price_inr": 9999,
+            "original_price_inr": 14999,
+            "language": "Hinglish",
+            "summary": "Build complete marketing funnels powered by AI agents end-to-end.",
+            "outcomes": [
+              "Launch full-stack campaigns solo",
+              "Run AI-assisted ads, email, landing pages",
+              "Measure + optimise with AI analytics"
+            ],
+            "modules": [
+              "Funnel-thinking for the AI era",
+              "Landing pages with AI builders",
+              "Email sequences: research \u2192 draft \u2192 personalise",
+              "Ad creatives + variations with AI",
+              "Analytics + AI weekly reporting",
+              "Capstone: full funnel for a real product"
+            ],
+            "audience": [
+              "professional",
+              "business_owner"
+            ],
+            "icon": "line-chart",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-seo",
+            "title": "AI for SEO",
+            "subtitle": "Keyword, content, technical & topical authority",
+            "level": "Intermediate",
+            "duration": "6 weeks",
+            "hours": 22,
+            "price_inr": 7499,
+            "original_price_inr": 10999,
+            "language": "Hinglish",
+            "summary": "Use AI to dominate SERPs with clustered content and on-page optimization.",
+            "outcomes": [
+              "Build topical authority clusters with AI",
+              "Ship 5x more SEO content with quality",
+              "Audit + fix technical SEO with AI assistants"
+            ],
+            "modules": [
+              "SEO in the AI era (Google\u2019s new signals)",
+              "Keyword + cluster research with AI",
+              "Briefs \u2192 outlines \u2192 drafts \u2192 polish workflow",
+              "On-page + entity SEO",
+              "Technical SEO audits with AI",
+              "GEO/AEO: optimising for AI search"
+            ],
+            "audience": [
+              "professional",
+              "business_owner"
+            ],
+            "icon": "search",
+            "accent": "#FF6A00"
+          },
+          {
+            "id": "ai-in-depth-technical",
+            "title": "AI in Depth (Technical)",
+            "subtitle": "LLMs, RAG, agents & deployments",
+            "level": "Advanced",
+            "duration": "10 weeks",
+            "hours": 40,
+            "price_inr": 14999,
+            "original_price_inr": 19999,
+            "language": "English + Hinglish",
+            "summary": "Go technical: LLMs, RAG, fine-tuning, agentic systems and production.",
+            "outcomes": [
+              "Build and ship LLM apps that scale",
+              "Design agents + RAG systems with proper guardrails",
+              "Deploy + observe AI features in production"
+            ],
+            "modules": [
+              "How LLMs really work (intuition, not math overload)",
+              "Prompting at scale + structured outputs",
+              "RAG: chunking, embeddings, retrieval quality",
+              "Agents + tool-use patterns",
+              "Evals + safety",
+              "Deployment + observability",
+              "Capstone: ship a production AI feature"
+            ],
+            "audience": [
+              "professional",
+              "student"
+            ],
+            "icon": "cpu",
+            "accent": "#FF6A00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/leads (valid)",
+      "endpoint": "/leads",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "id": "0e00e60c-4bfb-4379-a582-21a7c09c45e1",
+        "name": "Test User",
+        "email": "test@example.com",
+        "phone": "+919876543210",
+        "audience_type": "professional",
+        "interest": "AI for marketing",
+        "source": "test_suite",
+        "created_at": "2026-06-30T08:15:01.293426Z"
+      }
+    },
+    {
+      "name": "POST /api/leads (invalid - missing email)",
+      "endpoint": "/leads",
+      "status": 422,
+      "expected": 422,
+      "passed": true,
+      "payload": {
+        "detail": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "email"
+            ],
+            "msg": "Field required",
+            "input": {
+              "name": "Test",
+              "phone": "+919876543210",
+              "audience_type": "student"
+            },
+            "url": "https://errors.pydantic.dev/2.13/v/missing"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/leads (invalid - bad audience_type)",
+      "endpoint": "/leads",
+      "status": 422,
+      "expected": 422,
+      "passed": true,
+      "payload": {
+        "detail": [
+          {
+            "type": "literal_error",
+            "loc": [
+              "body",
+              "audience_type"
+            ],
+            "msg": "Input should be 'student', 'professional', 'business_owner' or 'parent'",
+            "input": "invalid_type",
+            "ctx": {
+              "expected": "'student', 'professional', 'business_owner' or 'parent'"
+            },
+            "url": "https://errors.pydantic.dev/2.13/v/literal_error"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GET /api/leads",
+      "endpoint": "/leads",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "leads": [
+          {
+            "id": "0e00e60c-4bfb-4379-a582-21a7c09c45e1",
+            "name": "Test User",
+            "email": "test@example.com",
+            "phone": "+919876543210",
+            "audience_type": "professional",
+            "interest": "AI for marketing",
+            "source": "test_suite",
+            "created_at": "2026-06-30T08:15:01.293426+00:00"
+          },
+          {
+            "id": "70ccd979-feaa-4669-9f4f-a2d0fd8a5121",
+            "name": "Test User",
+            "email": "test@example.com",
+            "phone": "+919999999999",
+            "audience_type": "professional",
+            "interest": "social media",
+            "source": "smoke",
+            "created_at": "2026-06-30T08:00:12.944812+00:00"
+          }
+        ]
+      }
+    },
+    {
+      "name": "POST /api/ai/course-consultant/message (first turn)",
+      "endpoint": "/ai/course-consultant/message",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "session_id": "consultant-2b402c2b-0176-4c9f-8736-fca04000e503",
+        "attempts": 1,
+        "assistant_message": "Wow, 5 brands \u2014 that's solid volume! Are you doing everything manually (content creation, captions, scheduling) or already using some tools? Also, curious \u2014 what's your biggest headache right now: ideation, consistency, or analytics?",
+        "course_ranking": [
+          {
+            "course_id": "ai-social-media-marketing",
+            "match_percentage": 95,
+            "label": "Most Recommended",
+            "reason": "Direct fit for multi-brand Instagram management with AI automation for content and scheduling."
+          },
+          {
+            "course_id": "ai-digital-marketing",
+            "match_percentage": 82,
+            "label": "Highly Relevant",
+            "reason": "Broader marketing automation skills that complement social media execution."
+          },
+          {
+            "course_id": "ai-baat-prompt-engg",
+            "match_percentage": 75,
+            "label": "Highly Relevant",
+            "reason": "Foundation for crafting prompts that generate high-quality captions and hooks efficiently."
+          },
+          {
+            "course_id": "ai-branding",
+            "match_percentage": 68,
+            "label": "Relevant",
+            "reason": "Useful for maintaining distinct brand voices across 5 different clients."
+          },
+          {
+            "course_id": "ai-ui-ux",
+            "match_percentage": 45,
+            "label": "Worth Exploring",
+            "reason": "Could help with designing Instagram carousel templates and visual consistency."
+          },
+          {
+            "course_id": "ai-seo",
+            "match_percentage": 38,
+            "label": "Worth Exploring",
+            "reason": "Instagram SEO exists but less critical than content creation workflows."
+          },
+          {
+            "course_id": "ai-in-depth-technical",
+            "match_percentage": 20,
+            "label": "Not Relevant",
+            "reason": "Too technical for immediate social media management needs."
+          }
+        ],
+        "ready_to_recommend": false
+      }
+    },
+    {
+      "name": "POST /api/ai/course-consultant/message (multi-turn)",
+      "endpoint": "/ai/course-consultant/message",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "session_id": "consultant-2b402c2b-0176-4c9f-8736-fca04000e503",
+        "attempts": 1,
+        "assistant_message": "Makes total sense \u2014 captions for 5 brands daily can drain hours! Quick question: do you also struggle with coming up with hooks/first lines, or is it mainly the full caption body? And are you looking to speed this up while keeping each brand's unique voice?",
+        "course_ranking": [
+          {
+            "course_id": "ai-social-media-marketing",
+            "match_percentage": 98,
+            "label": "Most Recommended",
+            "reason": "Specifically teaches AI automation for captions, hooks and maintaining brand voice at scale."
+          },
+          {
+            "course_id": "ai-baat-prompt-engg",
+            "match_percentage": 88,
+            "label": "Highly Relevant",
+            "reason": "Master prompts to generate consistent, on-brand captions quickly across all 5 brands."
+          },
+          {
+            "course_id": "ai-branding",
+            "match_percentage": 78,
+            "label": "Highly Relevant",
+            "reason": "Helps codify each brand's voice so AI-generated captions stay authentic."
+          },
+          {
+            "course_id": "ai-digital-marketing",
+            "match_percentage": 72,
+            "label": "Relevant",
+            "reason": "Broader automation skills that include content workflows beyond just captions."
+          },
+          {
+            "course_id": "ai-ui-ux",
+            "match_percentage": 42,
+            "label": "Worth Exploring",
+            "reason": "Could assist with visual template creation but not caption-focused."
+          },
+          {
+            "course_id": "ai-seo",
+            "match_percentage": 35,
+            "label": "Worth Exploring",
+            "reason": "Keyword optimization less urgent than caption writing efficiency."
+          },
+          {
+            "course_id": "ai-in-depth-technical",
+            "match_percentage": 18,
+            "label": "Not Relevant",
+            "reason": "Technical depth unnecessary for caption automation goal."
+          }
+        ],
+        "ready_to_recommend": true
+      }
+    },
+    {
+      "name": "POST /api/ai/course-consultant/reset",
+      "endpoint": "/ai/course-consultant/reset",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "ok": true
+      }
+    },
+    {
+      "name": "POST /api/ai/job-risk/message (first turn)",
+      "endpoint": "/ai/job-risk/message",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "session_id": "jobrisk-2d33b485-ea32-43e9-8ac9-822eb2494b4f",
+        "attempts": 1,
+        "assistant_message": "Got it \u2014 so you're doing captions, scheduling, and ad analytics daily. Quick question: Are you currently using any AI tools for these tasks, or is it mostly manual work right now?",
+        "risk": {
+          "probability": 68,
+          "severity": "high",
+          "headline": "Your repetitive tasks are prime targets for AI automation within 12-18 months",
+          "reasons": [
+            "Caption writing is rapidly being automated by GPT-4 and specialized marketing LLMs",
+            "Scheduling and performance reviews are already handled end-to-end by AI-powered platforms",
+            "Manual execution of these tasks offers little strategic differentiation"
+          ],
+          "safe_zones": [
+            "Strategic thinking \u2014 understanding brand voice and audience psychology",
+            "Creative direction and high-level campaign concepts",
+            "Relationship building with influencers and community management"
+          ],
+          "recommended_courses": [
+            {
+              "course_id": "ai-social-media-marketing",
+              "why": "Learn to automate captions, scheduling and analytics so you focus on strategy, not execution"
+            },
+            {
+              "course_id": "ai-baat-prompt-engg",
+              "why": "Master prompts that generate on-brand captions faster than manual writing"
+            }
+          ]
+        },
+        "confidence": 55
+      }
+    },
+    {
+      "name": "POST /api/ai/job-risk/message (multi-turn)",
+      "endpoint": "/ai/job-risk/message",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "session_id": "jobrisk-2d33b485-ea32-43e9-8ac9-822eb2494b4f",
+        "attempts": 1,
+        "assistant_message": "That's a red flag \u2014 competitors using AI are already 5-10x faster on the same tasks. One more thing: Do you also handle strategy (like planning campaigns, choosing platforms, setting KPIs), or is your role mostly execution of what others decide?",
+        "risk": {
+          "probability": 78,
+          "severity": "high",
+          "headline": "Without AI adoption, you're competing at a severe speed and cost disadvantage",
+          "reasons": [
+            "Manual caption writing takes 15-30 min per post; AI does it in 30 seconds with equal or better quality",
+            "Employers are already replacing non-AI social media managers with AI-powered alternatives or smaller teams",
+            "Your manual workflow makes you 10x more expensive per output than AI-equipped peers"
+          ],
+          "safe_zones": [
+            "Deep brand understanding and voice consistency across campaigns",
+            "Audience insight and emotional intelligence in messaging",
+            "Crisis management and real-time community engagement"
+          ],
+          "recommended_courses": [
+            {
+              "course_id": "ai-social-media-marketing",
+              "why": "Immediately close the speed gap \u2014 automate captions, scheduling and analytics to stay competitive"
+            },
+            {
+              "course_id": "ai-baat-prompt-engg",
+              "why": "Learn the foundational skill of talking to AI so you control it instead of being replaced by it"
+            }
+          ]
+        },
+        "confidence": 72
+      }
+    },
+    {
+      "name": "POST /api/ai/job-risk/reset",
+      "endpoint": "/ai/job-risk/reset",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "payload": {
+        "ok": true
+      }
+    }
+  ]
+}
