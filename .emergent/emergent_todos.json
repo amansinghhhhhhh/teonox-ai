@@ -1,0 +1,54 @@
+[
+  {
+    "content": "Phase 1: Get Claude Sonnet 4.5 integration playbook from integration_playbook_expert_v2",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 1: Build single POC Python script proving (a) Course Consultant chat+JSON ranking and (b) Job Risk Analyzer chat+JSON metrics",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 1: Run POC, fix until >=95% strict JSON parse success across 8-10 test inputs covering all 5 Phase 1 user stories (RESULT: 17/17 = 100% on first run)",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Get design guidelines from design_agent (brand palette refinement, teonox.ai logo concept, 5-page layout, mobile-first)",
+    "status": "in_progress"
+  },
+  {
+    "content": "Phase 2: Build backend (FastAPI) — leads model, /api/leads, /api/ai/course-consultant, /api/ai/job-risk, /api/courses with 7 pilot courses",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build frontend — new teonox.ai SVG logo, brand tokens, layout, animations infra (Framer Motion + Lottie)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build Home page (hero + abstract animated bg + scroll storytelling + masterclass signup)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build The Gap page (trust narrative + 4 audience sections)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build Explore Courses page (AI consultant + live reshuffle + library view toggle)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build Results page (before/after transformation stories)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Build 'AI aapki Job legi?' page (chatbot + live updating risk infographic)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: All user stories (homepage clarity, 30s masterclass signup, course reshuffle, library fallback, results stories) covered in development",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: End-to-End testing using testing_agent_v3 and fix all reported issues",
+    "status": "pending"
+  }
+]
