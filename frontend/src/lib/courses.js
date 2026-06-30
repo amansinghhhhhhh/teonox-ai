@@ -10,18 +10,18 @@ export const COURSE_ICON_BY_ID = {
 };
 
 export function badgeTier(p) {
-    if (p >= 90) return { label: 'Most Recommended', bg: '#DCFCE7', fg: '#166534', dot: '#16A34A' };
-    if (p >= 70) return { label: 'Strong Match', bg: '#ECFCCB', fg: '#365314', dot: '#84CC16' };
-    if (p >= 50) return { label: 'Good Fit', bg: '#FEF3C7', fg: '#92400E', dot: '#F59E0B' };
-    if (p >= 30) return { label: 'Worth Exploring', bg: '#FFEDD5', fg: '#9A3412', dot: '#F97316' };
-    return { label: 'Not Relevant', bg: '#FEE2E2', fg: '#991B1B', dot: '#EF4444' };
+    if (p >= 90) return { label: 'Most Recommended', bg: '#16A34A22', fg: '#86EFAC', fg2: '#A7F3D0', dot: '#22C55E' };
+    if (p >= 70) return { label: 'Strong Match', bg: '#84CC1622', fg: '#BEF264', fg2: '#D9F99D', dot: '#84CC16' };
+    if (p >= 50) return { label: 'Good Fit', bg: '#F59E0B22', fg: '#FCD34D', fg2: '#FDE68A', dot: '#F59E0B' };
+    if (p >= 30) return { label: 'Worth Exploring', bg: '#F9731622', fg: '#FDBA74', fg2: '#FED7AA', dot: '#F97316' };
+    return { label: 'Not Relevant', bg: '#EF444422', fg: '#FCA5A5', fg2: '#FECACA', dot: '#EF4444' };
 }
 
 export const SEVERITY_COLORS = {
-    low: { bg: '#DCFCE7', fg: '#166534', stroke: '#16A34A', label: 'Low risk' },
-    medium: { bg: '#FEF3C7', fg: '#92400E', stroke: '#F59E0B', label: 'Medium risk' },
-    high: { bg: '#FFEDD5', fg: '#9A3412', stroke: '#F97316', label: 'High risk' },
-    critical: { bg: '#FEE2E2', fg: '#991B1B', stroke: '#EF4444', label: 'Critical risk' },
+    low: { bg: '#16A34A22', fg: '#86EFAC', stroke: '#22C55E', label: 'Low risk' },
+    medium: { bg: '#F59E0B22', fg: '#FCD34D', stroke: '#F59E0B', label: 'Medium risk' },
+    high: { bg: '#F9731622', fg: '#FDBA74', stroke: '#F97316', label: 'High risk' },
+    critical: { bg: '#EF444422', fg: '#FCA5A5', stroke: '#EF4444', label: 'Critical risk' },
 };
 
 export const AUDIENCE_OPTIONS = [

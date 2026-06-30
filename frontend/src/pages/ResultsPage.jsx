@@ -2,21 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-    Clock,
-    AlertTriangle,
-    Smile,
     ArrowRight,
     Sparkles,
     TrendingUp,
     TrendingDown,
     XCircle,
     CheckCircle2,
-    BarChart3,
     Bot,
+    ArrowUpRight,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useMasterclass } from '@/components/MasterclassProvider';
+import { TextReveal } from '@/components/gsap/TextReveal';
+import { RevealOnScroll } from '@/components/gsap/RevealOnScroll';
+import { MagneticButton } from '@/components/gsap/MagneticButton';
+import { Counter } from '@/components/gsap/Counter';
 import { RESULTS } from '@/constants/testIds';
 
 const STORIES = [
@@ -32,9 +32,9 @@ const STORIES = [
                 'Manager keeps asking “why is engagement flat?”',
             ],
             metrics: [
-                { label: 'Time/week', value: '52 hrs', tone: 'bad' },
-                { label: 'Posts/week', value: '14', tone: 'bad' },
-                { label: 'Engagement', value: '1.2%', tone: 'bad' },
+                { label: 'Time/week', value: '52', suffix: ' hrs' },
+                { label: 'Posts/week', value: '14', suffix: '' },
+                { label: 'Engagement', value: '1.2', suffix: '%' },
             ],
         },
         after: {
@@ -46,9 +46,9 @@ const STORIES = [
                 'Friday report writes itself with citations',
             ],
             metrics: [
-                { label: 'Time/week', value: '18 hrs', tone: 'good' },
-                { label: 'Posts/week', value: '38', tone: 'good' },
-                { label: 'Engagement', value: '4.6%', tone: 'good' },
+                { label: 'Time/week', value: '18', suffix: ' hrs' },
+                { label: 'Posts/week', value: '38', suffix: '' },
+                { label: 'Engagement', value: '4.6', suffix: '%' },
             ],
         },
     },
@@ -64,9 +64,9 @@ const STORIES = [
                 'Manager already drafts with ChatGPT solo',
             ],
             metrics: [
-                { label: 'Output', value: '4 blogs/day', tone: 'bad' },
-                { label: 'Top-10 ranks', value: '6%', tone: 'bad' },
-                { label: 'Editor edits', value: '↑ 65%', tone: 'bad' },
+                { label: 'Output', value: '4', suffix: '/day' },
+                { label: 'Top-10 ranks', value: '6', suffix: '%' },
+                { label: 'Editor edits', value: '65', suffix: '%' },
             ],
         },
         after: {
@@ -78,9 +78,9 @@ const STORIES = [
                 'Briefs evolve into a content engine',
             ],
             metrics: [
-                { label: 'Output', value: '10 blogs/day', tone: 'good' },
-                { label: 'Top-10 ranks', value: '31%', tone: 'good' },
-                { label: 'Editor edits', value: '↓ 70%', tone: 'good' },
+                { label: 'Output', value: '10', suffix: '/day' },
+                { label: 'Top-10 ranks', value: '31', suffix: '%' },
+                { label: 'Editor edits', value: '15', suffix: '%' },
             ],
         },
     },
@@ -96,9 +96,9 @@ const STORIES = [
                 'No design-to-code pipeline',
             ],
             metrics: [
-                { label: 'Sprint output', value: '2 flows', tone: 'bad' },
-                { label: 'Revisions', value: '8/flow', tone: 'bad' },
-                { label: 'Stakeholder NPS', value: '+12', tone: 'bad' },
+                { label: 'Sprint flows', value: '2', suffix: '' },
+                { label: 'Revisions', value: '8', suffix: '/flow' },
+                { label: 'NPS', value: '12', suffix: '' },
             ],
         },
         after: {
@@ -110,9 +110,9 @@ const STORIES = [
                 'Hand-off to devs with clean specs',
             ],
             metrics: [
-                { label: 'Sprint output', value: '6 flows', tone: 'good' },
-                { label: 'Revisions', value: '2/flow', tone: 'good' },
-                { label: 'Stakeholder NPS', value: '+62', tone: 'good' },
+                { label: 'Sprint flows', value: '6', suffix: '' },
+                { label: 'Revisions', value: '2', suffix: '/flow' },
+                { label: 'NPS', value: '62', suffix: '' },
             ],
         },
     },
@@ -128,9 +128,9 @@ const STORIES = [
                 'No analytics rhythm — fly blind',
             ],
             metrics: [
-                { label: 'ROAS', value: '1.4x', tone: 'bad' },
-                { label: 'Repeat rate', value: '11%', tone: 'bad' },
-                { label: 'Hours/week', value: '70', tone: 'bad' },
+                { label: 'ROAS', value: '1.4', suffix: 'x' },
+                { label: 'Repeat rate', value: '11', suffix: '%' },
+                { label: 'Hours/wk', value: '70', suffix: '' },
             ],
         },
         after: {
@@ -142,24 +142,28 @@ const STORIES = [
                 'Saved 30 hrs/week to focus on product',
             ],
             metrics: [
-                { label: 'ROAS', value: '3.8x', tone: 'good' },
-                { label: 'Repeat rate', value: '29%', tone: 'good' },
-                { label: 'Hours/week', value: '40', tone: 'good' },
+                { label: 'ROAS', value: '3.8', suffix: 'x' },
+                { label: 'Repeat rate', value: '29', suffix: '%' },
+                { label: 'Hours/wk', value: '40', suffix: '' },
             ],
         },
     },
 ];
 
-const MetricChip = ({ m }) => {
-    const isGood = m.tone === 'good';
+const MetricChip = ({ m, tone }) => {
+    const isGood = tone === 'good';
     return (
         <div
-            className={`rounded-xl px-3 py-2 text-center border ${
-                isGood ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'
+            className={`rounded-xl px-3 py-2.5 text-center border ${
+                isGood
+                    ? 'bg-emerald-500/8 border-emerald-500/30 text-emerald-300'
+                    : 'bg-rose-500/8 border-rose-500/30 text-rose-300'
             }`}
         >
-            <div className="text-xs uppercase tracking-[0.16em] opacity-70">{m.label}</div>
-            <div className="font-display font-semibold text-base mt-0.5">{m.value}</div>
+            <div className="text-[10px] uppercase tracking-[0.18em] opacity-80">{m.label}</div>
+            <div className="font-display font-semibold text-base mt-0.5">
+                <Counter value={m.value} suffix={m.suffix} />
+            </div>
         </div>
     );
 };
@@ -167,87 +171,101 @@ const MetricChip = ({ m }) => {
 export default function ResultsPage() {
     const { open } = useMasterclass();
     return (
-        <div data-testid={RESULTS.page} className="section-paper">
-            <section className="pt-12 sm:pt-16 pb-8">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Badge className="bg-[#FFEDD5] text-[#9A3412] hover:bg-[#FFEDD5]">Real outcomes</Badge>
-                    <h1 className="font-display mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
-                        Before AI. After Teonox. <span className="gradient-orange-text">A clear transformation.</span>
-                    </h1>
-                    <p className="text-slate-600 mt-3 max-w-2xl">
+        <div data-testid={RESULTS.page} className="section-deep">
+            <section className="relative overflow-hidden pt-20 sm:pt-24 pb-10">
+                <div className="orb orb-orange" style={{ width: 460, height: 460, top: -180, left: -120, opacity: 0.3 }} />
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Badge className="bg-[#FF6A00] hover:bg-[#FF6A00] text-white border-0">Real outcomes</Badge>
+                    <TextReveal
+                        as="h1"
+                        text="Before AI. After Teonox."
+                        className="font-display mt-5 text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-[0.98] tracking-tight"
+                    />
+                    <TextReveal
+                        as="h1"
+                        text="A clear transformation."
+                        className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.98] tracking-tight gradient-orange-text"
+                        delay={0.18}
+                    />
+                    <p className="text-ink-2 mt-5 max-w-2xl text-base sm:text-lg">
                         Manual, exhausting, easily replaced — versus AI-leveraged, focused, leading. These are the
                         archetypes our cohorts come in as, and walk out as.
                     </p>
                 </div>
             </section>
 
-            <section className="py-6 sm:py-8">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
-                    {STORIES.map((s, i) => (
+            <section className="py-8 sm:py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+                    {STORIES.map((s) => (
                         <motion.article
                             key={s.role}
                             data-testid={RESULTS.storyCard}
-                            initial={{ opacity: 0, y: 24 }}
+                            initial={{ opacity: 0, y: 28 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.25 }}
-                            transition={{ duration: 0.55, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                            className="rounded-3xl bg-white border border-slate-200 shadow-[0_10px_30px_rgba(2,6,23,0.05)] overflow-hidden"
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                            className="rounded-3xl card-elev overflow-hidden"
                         >
-                            <div className="px-5 sm:px-8 py-5 border-b border-slate-200 flex items-center justify-between gap-3 flex-wrap">
-                                <h2 className="font-display text-xl sm:text-2xl font-bold text-slate-900">{s.role}</h2>
+                            <div className="px-5 sm:px-8 py-5 border-b border-white/8 flex items-center justify-between gap-3 flex-wrap">
+                                <h2 className="font-display text-xl sm:text-2xl font-bold text-white">{s.role}</h2>
                                 <div className="flex flex-wrap gap-2">
                                     {s.course_ids.map((cid) => (
                                         <Link
                                             to="/courses"
                                             key={cid}
-                                            className="text-xs rounded-full bg-[#FFF1E2] text-[#9A3412] px-3 py-1 hover:bg-[#FFE3CB]"
+                                            className="text-xs rounded-full bg-[#FF6A00]/15 text-[#FFB872] border border-[#FF6A00]/30 px-3 py-1 hover:bg-[#FF6A00]/25"
                                         >
                                             {cid.replace('ai-', 'AI ').replaceAll('-', ' ')}
                                         </Link>
                                     ))}
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/8 relative">
+                                {/* Connecting arrow */}
+                                <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[#FF6A00] text-white items-center justify-center btn-orange-glow border-4 border-[#0E1638]">
+                                    <ArrowRight className="w-5 h-5" />
+                                </div>
+
                                 {/* Before */}
-                                <div className="p-5 sm:p-8 bg-rose-50/30">
+                                <div className="p-5 sm:p-8 bg-rose-500/3 relative">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 grid place-items-center">
+                                        <div className="w-9 h-9 rounded-xl bg-rose-500/15 text-rose-300 grid place-items-center border border-rose-500/30">
                                             <TrendingDown className="w-5 h-5" />
                                         </div>
-                                        <span className="text-xs uppercase tracking-[0.18em] text-rose-700">Before</span>
+                                        <span className="text-xs uppercase tracking-[0.2em] text-rose-300">Before</span>
                                     </div>
-                                    <h3 className="font-display text-lg font-semibold text-slate-900 mt-3">{s.before.headline}</h3>
-                                    <ul className="mt-3 space-y-1.5">
+                                    <h3 className="font-display text-lg sm:text-xl font-semibold text-white mt-4">{s.before.headline}</h3>
+                                    <ul className="mt-3 space-y-2">
                                         {s.before.pains.map((p, idx) => (
-                                            <li key={idx} className="text-sm text-slate-700 flex gap-2">
-                                                <XCircle className="w-4 h-4 mt-0.5 text-rose-500" />
+                                            <li key={idx} className="text-sm text-ink-2 flex gap-2">
+                                                <XCircle className="w-4 h-4 mt-0.5 text-rose-400 shrink-0" />
                                                 {p}
                                             </li>
                                         ))}
                                     </ul>
-                                    <div className="mt-4 grid grid-cols-3 gap-2">
-                                        {s.before.metrics.map((m) => <MetricChip key={m.label} m={m} />)}
+                                    <div className="mt-5 grid grid-cols-3 gap-2">
+                                        {s.before.metrics.map((m) => <MetricChip key={m.label} m={m} tone="bad" />)}
                                     </div>
                                 </div>
                                 {/* After */}
-                                <div className="p-5 sm:p-8 bg-emerald-50/30">
+                                <div className="p-5 sm:p-8 bg-emerald-500/3 relative">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 grid place-items-center">
+                                        <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-300 grid place-items-center border border-emerald-500/30">
                                             <TrendingUp className="w-5 h-5" />
                                         </div>
-                                        <span className="text-xs uppercase tracking-[0.18em] text-emerald-700">After</span>
+                                        <span className="text-xs uppercase tracking-[0.2em] text-emerald-300">After</span>
                                     </div>
-                                    <h3 className="font-display text-lg font-semibold text-slate-900 mt-3">{s.after.headline}</h3>
-                                    <ul className="mt-3 space-y-1.5">
+                                    <h3 className="font-display text-lg sm:text-xl font-semibold text-white mt-4">{s.after.headline}</h3>
+                                    <ul className="mt-3 space-y-2">
                                         {s.after.wins.map((w, idx) => (
-                                            <li key={idx} className="text-sm text-slate-700 flex gap-2">
-                                                <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-600" />
+                                            <li key={idx} className="text-sm text-ink-2 flex gap-2">
+                                                <CheckCircle2 className="w-4 h-4 mt-0.5 text-emerald-400 shrink-0" />
                                                 {w}
                                             </li>
                                         ))}
                                     </ul>
-                                    <div className="mt-4 grid grid-cols-3 gap-2">
-                                        {s.after.metrics.map((m) => <MetricChip key={m.label} m={m} />)}
+                                    <div className="mt-5 grid grid-cols-3 gap-2">
+                                        {s.after.metrics.map((m) => <MetricChip key={m.label} m={m} tone="good" />)}
                                     </div>
                                 </div>
                             </div>
@@ -257,32 +275,33 @@ export default function ResultsPage() {
             </section>
 
             {/* CTA */}
-            <section className="section-mist py-12 sm:py-16">
+            <section className="section-night py-16 sm:py-20">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="rounded-3xl bg-[#0B0F14] text-white p-8 sm:p-10 relative overflow-hidden noise-overlay">
-                        <div className="orb orb-orange" style={{ width: 320, height: 320, top: -120, left: -100 }} />
+                    <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12 relative overflow-hidden noise-overlay">
+                        <div className="orb orb-orange" style={{ width: 360, height: 360, top: -140, left: -100 }} />
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                             <div className="lg:col-span-8">
-                                <h3 className="font-display text-2xl sm:text-3xl font-bold">Which transformation is yours?</h3>
-                                <p className="text-white/70 mt-2">
+                                <h3 className="font-display text-2xl sm:text-4xl font-bold text-white">
+                                    Which transformation is yours?
+                                </h3>
+                                <p className="text-ink-2 mt-3 max-w-xl">
                                     Chat with our AI Counsellor — it ranks the right path for your role in under a minute.
                                 </p>
                             </div>
                             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3">
                                 <Link to="/courses" className="sm:flex-1">
-                                    <Button className="w-full h-12 bg-[#FF6A00] hover:bg-[#E85F00] text-white rounded-xl">
-                                        <Bot className="w-4 h-4 mr-2" />
+                                    <button type="button" className="w-full h-12 inline-flex items-center justify-center gap-2 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl font-semibold btn-orange-glow">
+                                        <Bot className="w-4 h-4" />
                                         Find my path
-                                    </Button>
+                                    </button>
                                 </Link>
-                                <Button
+                                <MagneticButton
                                     onClick={() => open('results_cta')}
-                                    variant="secondary"
-                                    className="w-full h-12 bg-white/10 hover:bg-white/15 border border-white/15 text-white rounded-xl"
+                                    className="w-full h-12 inline-flex items-center justify-center gap-2 bg-white/8 hover:bg-white/12 border border-white/15 text-white rounded-xl"
                                 >
-                                    <Sparkles className="w-4 h-4 mr-2" />
+                                    <Sparkles className="w-4 h-4" />
                                     Free Masterclass
-                                </Button>
+                                </MagneticButton>
                             </div>
                         </div>
                     </div>

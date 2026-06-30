@@ -1,54 +1,38 @@
 [
   {
-    "content": "Phase 1: Get Claude Sonnet 4.5 integration playbook from integration_playbook_expert_v2",
+    "content": "Revamp foundation: dark-first theme + dark CSS tokens + new hero with cursor-reactive dot grid (NO orange/cyan gradient)",
     "status": "completed"
   },
   {
-    "content": "Phase 1: Build single POC Python script proving (a) Course Consultant chat+JSON ranking and (b) Job Risk Analyzer chat+JSON metrics",
+    "content": "Build GSAP utility components: TextReveal (with auto-in-viewport detection), Counter, Marquee, RevealOnScroll, MagneticButton",
     "status": "completed"
   },
   {
-    "content": "Phase 1: Run POC, fix until >=95% strict JSON parse success across 8-10 test inputs (RESULT: 17/17 = 100%)",
+    "content": "Revamp Home page: cinematic dark hero, dot-grid bg, text-reveal H1, counters, pinned scroll story, marquee, animated stats",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Get design guidelines from design_agent (brand palette, teonox.ai logo concept, 5-page layout, mobile-first)",
+    "content": "Revamp The Gap page: dark theme + GSAP comparison table + audience bento with reveal-on-scroll",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Build backend (FastAPI) — leads, /api/courses, /api/ai/course-consultant, /api/ai/job-risk",
+    "content": "Revamp Explore Courses page: dark theme on consultant + library, dark match badges with glow",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Build frontend foundation — new teonox.ai SVG logo, brand tokens, layout, animations infra (Framer Motion + Lottie-free)",
+    "content": "Revamp Results page: dark theme, before/after with connecting arrow, GSAP counters on metrics",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Build Home page (hero + abstract animated bg + scroll storytelling + masterclass signup)",
+    "content": "Revamp Job Risk page: dark theme, dark dial, severity styling on dark",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Build The Gap page (trust narrative + 4 audience sections)",
+    "content": "Revamp Header/Footer/StickyMobileCta for dark theme (transparent over hero, dark blur on scroll)",
     "status": "completed"
   },
   {
-    "content": "Phase 2: Build Explore Courses page (AI consultant + live reshuffle + library view toggle)",
+    "content": "Fix hero issues: dot-grid replaces orange-cyan gradient, gradient text works with split-char animations, verified on desktop screenshot",
     "status": "completed"
-  },
-  {
-    "content": "Phase 2: Build Results page (before/after transformation stories)",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: Build 'AI aapki Job legi?' page (chatbot + live updating risk infographic)",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: All user stories covered in development (homepage clarity, 30s masterclass signup, course reshuffle, library fallback, results stories, risk infographic)",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: End-to-End testing using testing_agent_v3 and fix all reported issues",
-    "status": "in_progress"
   }
 ]

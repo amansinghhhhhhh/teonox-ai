@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { TeonoxLogo } from './TeonoxLogo';
 import { NAV } from '@/constants/testIds';
-import { Mail, MessageCircle, MapPin, Sparkles } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Sparkles, ArrowUpRight } from 'lucide-react';
 
 const LINKS = [
     { label: 'Home', to: '/' },
@@ -14,15 +14,32 @@ const LINKS = [
 
 export const Footer = ({ onOpenMasterclass }) => {
     return (
-        <footer data-testid={NAV.footer} className="dark-panel relative noise-overlay">
-            <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+        <footer data-testid={NAV.footer} className="relative section-deep border-t border-white/8 noise-overlay">
+            <div className="orb orb-orange" style={{ width: 460, height: 460, top: -160, left: -180, opacity: 0.35 }} />
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
+                {/* Big closing line */}
+                <div className="max-w-3xl">
+                    <p className="text-xs uppercase tracking-[0.22em] text-[#FF8A3D]">Learn. Apply. Lead.</p>
+                    <h2 className="font-display mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.05] text-white">
+                        AI seekhna hai. <span className="gradient-orange-text">Asli kaam karna hai.</span>
+                    </h2>
+                    <button
+                        onClick={onOpenMasterclass}
+                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#FF6A00] hover:bg-[#FF8226] px-6 py-3.5 text-white font-semibold btn-orange-glow"
+                    >
+                        <Sparkles className="w-4 h-4" />
+                        Join Free Masterclass
+                        <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                </div>
+
                 {/* Trust strip */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pb-8 border-b border-white/10">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-12 pb-8 border-b border-white/10">
                     {[
                         'Made in India',
                         'Live cohorts + recordings',
                         'Templates worth ₹50,000',
-                        'Claude-powered consultant',
+                        'Claude Sonnet 4.5 powered',
                     ].map((t) => (
                         <div key={t} className="flex items-center gap-2 text-sm text-white/70">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#FF6A00]" />
@@ -36,15 +53,8 @@ export const Footer = ({ onOpenMasterclass }) => {
                         <TeonoxLogo variant="light" size={32} />
                         <p className="mt-4 text-white/65 max-w-md">
                             Job-ready AI skills for students, professionals, business owners and parents. We teach the
-                            workflows companies actually use — not just tools, real systems.
+                            workflows companies actually use — not just tools, but the systems behind them.
                         </p>
-                        <button
-                            onClick={onOpenMasterclass}
-                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#FF6A00] hover:bg-[#E85F00] px-5 py-3 text-white font-medium shadow-[0_10px_24px_rgba(255,106,0,0.25)]"
-                        >
-                            <Sparkles className="w-4 h-4" />
-                            Join Free Masterclass
-                        </button>
                     </div>
 
                     <div className="md:col-span-3">
@@ -80,9 +90,7 @@ export const Footer = ({ onOpenMasterclass }) => {
                 </div>
 
                 <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                    <p className="text-xs text-white/45">
-                        © {new Date().getFullYear()} teonox.ai — Learn. Apply. Lead.
-                    </p>
+                    <p className="text-xs text-white/45">© {new Date().getFullYear()} teonox.ai — Learn. Apply. Lead.</p>
                     <p className="text-xs text-white/45">Built mobile-first • Powered by Claude Sonnet 4.5</p>
                 </div>
             </div>

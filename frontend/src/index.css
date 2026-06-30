@@ -4,62 +4,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================================
+   Teonox.ai — dark-first brand theme (navy + orange + white)
+   ========================================================================= */
+
+html, body {
+    background: #060B1A;
+    color: #F2F4F8;
+}
+
 body {
     margin: 0;
     font-family: 'Figtree', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #F7F8FA;
-    color: #0B0F14;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6, .font-display {
     font-family: 'Space Grotesk', 'Figtree', sans-serif;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
 }
 
 .font-mono {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
-code {
-    font-family: 'IBM Plex Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 @layer base {
     :root {
-        --background: 210 33% 98%;
-        --foreground: 222 47% 11%;
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 222 47% 11%;
+        /* Dark-first shadcn tokens */
+        --background: 222 60% 6%;
+        --foreground: 0 0% 96%;
+        --card: 222 50% 9%;
+        --card-foreground: 0 0% 96%;
+        --popover: 222 50% 9%;
+        --popover-foreground: 0 0% 96%;
         --primary: 18 100% 50%;
         --primary-foreground: 0 0% 100%;
-        --secondary: 210 40% 96%;
-        --secondary-foreground: 222 47% 11%;
-        --muted: 210 40% 96%;
-        --muted-foreground: 215 16% 47%;
-        --accent: 210 40% 96%;
-        --accent-foreground: 222 47% 11%;
+        --secondary: 222 35% 14%;
+        --secondary-foreground: 0 0% 96%;
+        --muted: 222 35% 14%;
+        --muted-foreground: 215 20% 70%;
+        --accent: 222 35% 14%;
+        --accent-foreground: 0 0% 96%;
         --destructive: 0 84% 55%;
         --destructive-foreground: 0 0% 100%;
-        --border: 214 32% 91%;
-        --input: 214 32% 91%;
+        --border: 222 35% 18%;
+        --input: 222 35% 18%;
         --ring: 18 100% 50%;
-        --chart-1: 18 100% 50%;
-        --chart-2: 174 65% 49%;
-        --chart-3: 215 28% 17%;
-        --chart-4: 43 96% 56%;
-        --chart-5: 142 71% 45%;
-        --radius: 0.75rem;
+        --radius: 0.875rem;
 
-        --brand-charcoal: #0B0F14;
-        --brand-navy: #0E1A2B;
+        /* Brand surfaces */
+        --bg-deep: #060B1A;
+        --bg-night: #0A1128;
+        --bg-card: #0E1638;
+        --bg-elev: #131C42;
+        --line-soft: rgba(255, 255, 255, 0.08);
+        --line-mid:  rgba(255, 255, 255, 0.14);
+
+        /* Brand accents */
         --brand-orange: #FF6A00;
-        --brand-orange-600: #E85F00;
-        --brand-orange-100: #FFE7D6;
+        --brand-orange-2: #FF8A3D;
+        --brand-orange-300: #FFB872;
         --micro-cyan: #2EE6D6;
+        --signal-green: #22C55E;
+        --signal-rose: #F43F5E;
     }
 }
 
@@ -72,89 +81,170 @@ code {
     }
 }
 
-@layer base {
-    [data-debug-wrapper='true'] {
-        display: contents !important;
-    }
+/* =========================================================================
+   Brand utilities (used across pages)
+   ========================================================================= */
+
+.bg-deep   { background-color: #060B1A; }
+.bg-night  { background-color: #0A1128; }
+.bg-card   { background-color: #0E1638; }
+.bg-elev   { background-color: #131C42; }
+
+.text-ink-1 { color: #F2F4F8; }
+.text-ink-2 { color: #C7CEDB; }
+.text-ink-3 { color: #8C95A8; }
+.text-ink-4 { color: #5C667B; }
+
+.border-soft { border-color: rgba(255, 255, 255, 0.08); }
+.border-mid  { border-color: rgba(255, 255, 255, 0.14); }
+
+.gradient-orange-text,
+.gradient-orange-text .split-word,
+.gradient-orange-text .split-char {
+    background: linear-gradient(90deg, #FF6A00 0%, #FFB872 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-ink-text {
+    background: linear-gradient(180deg, #FFFFFF 0%, #C7CEDB 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
-/* ---- Custom utilities ---- */
+/* Hero wash backgrounds */
 .hero-ember-wash {
     background:
-        radial-gradient(900px circle at 20% 10%, rgba(255, 106, 0, 0.22), transparent 55%),
-        radial-gradient(700px circle at 80% 30%, rgba(46, 230, 214, 0.10), transparent 60%),
-        linear-gradient(180deg, #0B0F14 0%, #0E1A2B 55%, #0B0F14 100%);
+        radial-gradient(1000px circle at 20% 10%, rgba(255, 106, 0, 0.26), transparent 55%),
+        radial-gradient(800px circle at 80% 30%, rgba(46, 230, 214, 0.10), transparent 60%),
+        linear-gradient(180deg, #060B1A 0%, #0A1128 55%, #060B1A 100%);
+}
+.section-night {
+    background: linear-gradient(180deg, #060B1A 0%, #0A1128 100%);
+}
+.section-deep {
+    background: #060B1A;
 }
 
-.section-mist {
-    background: linear-gradient(180deg, #FFFFFF 0%, #F7F8FA 100%);
-}
-
-.section-paper {
-    background-color: #F7F8FA;
-}
-
-.dark-panel {
-    background: #0B0F14;
-    color: #FFFFFF;
-}
-
-/* Subtle SVG noise overlay — used as a positioned pseudo-element */
+/* Subtle noise overlay */
 .noise-overlay::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
     opacity: 0.08;
     mix-blend-mode: overlay;
     z-index: 0;
 }
 
-.gradient-orange-text {
-    background: linear-gradient(90deg, #FF6A00 0%, #FF8A3D 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+/* Grid lines overlay (used on hero + key sections) */
+.grid-lines {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
 }
 
-/* CSS-only floating orb (used when Lottie not needed) */
+/* Cards on dark theme */
+.card-glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.card-elev {
+    background: #0E1638;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.card-elev:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Orange button glow */
+.btn-orange-glow {
+    box-shadow: 0 18px 40px rgba(255, 106, 0, 0.32), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+
+/* Orbs (floating gradient blobs) */
 .orb {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(60px);
-    opacity: 0.55;
+    filter: blur(70px);
+    opacity: 0.6;
     pointer-events: none;
 }
 .orb-orange { background: radial-gradient(circle at 30% 30%, #FF6A00, transparent 70%); }
 .orb-cyan   { background: radial-gradient(circle at 70% 30%, #2EE6D6, transparent 70%); }
 .orb-navy   { background: radial-gradient(circle at 50% 50%, #4d6cff, transparent 70%); }
+.orb-violet { background: radial-gradient(circle at 50% 50%, #6c4dff, transparent 70%); }
 
-/* CSS 3D card tilt (disabled on touch) */
+/* GSAP text reveal pieces */
+.split-line { display: block; overflow: hidden; line-height: 1.05; }
+.split-line > .split-word { display: inline-block; will-change: transform, opacity; }
+.split-char { display: inline-block; will-change: transform, opacity; }
+
+/* Marquee track */
+.marquee {
+    display: flex;
+    gap: 3rem;
+    width: max-content;
+    animation: marquee-scroll 28s linear infinite;
+}
+.marquee-fast { animation-duration: 18s; }
+.marquee-reverse { animation-direction: reverse; }
+.marquee:hover { animation-play-state: paused; }
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* Custom selection */
+::selection {
+    background-color: rgba(255, 106, 0, 0.5);
+    color: #fff;
+}
+
+/* Custom scrollbar (dark) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #060B1A; }
+::-webkit-scrollbar-thumb { background: #1F2A55; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #2A3870; }
+
+/* Scroll anchor offset for sticky header */
+section[id] { scroll-margin-top: 96px; }
+
+/* CSS 3D card tilt */
 @media (hover: hover) {
     .tilt {
         transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
         transform-style: preserve-3d;
     }
-    .tilt:hover {
-        transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-2px);
-    }
+    .tilt:hover { transform: perspective(900px) rotateX(2deg) rotateY(-2deg) translateY(-2px); }
 }
 
-/* Scroll-margin so sticky header doesn't cover anchors */
-section[id] {
-    scroll-margin-top: 80px;
-}
-
-/* Hide scrollbar but keep scroll for course shelf carousel on mobile */
+/* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Focus-visible ring helper */
 .focus-ring { outline: none; }
-.focus-ring:focus-visible { box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.35); border-radius: 12px; }
+.focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.45);
+    border-radius: 12px;
+}
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    .orb { animation: none !important; }
+    .orb { animation: none !important; filter: blur(40px); }
     .tilt:hover { transform: none !important; }
+    .marquee { animation: none !important; }
+}
+
+@layer base {
+    [data-debug-wrapper='true'] {
+        display: contents !important;
+    }
 }

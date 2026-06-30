@@ -15,13 +15,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[+\d][\d\s\-()]{5,18}$/;
 
 export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_masterclass' }) => {
-    const [form, setForm] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        audience_type: 'professional',
-        interest: '',
-    });
+    const [form, setForm] = useState({ name: '', email: '', phone: '', audience_type: 'professional', interest: '' });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -47,7 +41,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
         try {
             await createLead({ ...form, source });
             setSuccess(true);
-            toast.success('You\u2019re in! Check WhatsApp for joining link.');
+            toast.success('You\u2019re in! Check WhatsApp for the joining link.');
         } catch (err) {
             console.error(err);
             toast.error('Something went wrong. Please try again.');
@@ -70,20 +64,20 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
         <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogContent
                 data-testid={MASTERCLASS.drawer}
-                className="sm:max-w-lg p-0 overflow-hidden rounded-2xl border border-slate-200 bg-white"
+                className="sm:max-w-lg p-0 overflow-hidden rounded-3xl border border-white/10 bg-card text-ink-1"
             >
-                <div className="relative px-6 pt-6 pb-4 bg-gradient-to-b from-[#FFF7EE] to-white">
+                <div className="relative px-6 pt-6 pb-4" style={{ background: 'radial-gradient(600px circle at 30% -20%, rgba(255,106,0,0.25), transparent 60%)' }}>
                     <DialogHeader className="text-left">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-[#FF6A00]/10 text-[#9A3412] px-3 py-1 text-xs font-medium w-max">
+                        <div className="inline-flex items-center gap-2 rounded-full bg-[#FF6A00]/15 text-[#FFB872] border border-[#FF6A00]/30 px-3 py-1 text-xs font-medium w-max">
                             <Sparkles className="w-3.5 h-3.5" />
                             Free live masterclass
                         </div>
-                        <DialogTitle className="font-display text-2xl sm:text-3xl mt-3 text-slate-900">
+                        <DialogTitle className="font-display text-2xl sm:text-3xl mt-3 text-white">
                             AI Chatbots — the must-knows.
                         </DialogTitle>
-                        <DialogDescription className="text-slate-600">
+                        <DialogDescription className="text-ink-2">
                             For students, professionals, business owners & parents. Walk away with templates and
-                            resources worth <span className="font-semibold text-slate-900">₹50,000</span>.
+                            resources worth <span className="font-semibold text-white">₹50,000</span>.
                         </DialogDescription>
                     </DialogHeader>
                 </div>
@@ -99,17 +93,14 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 data-testid={MASTERCLASS.successState}
                                 className="py-8 text-center"
                             >
-                                <div className="mx-auto w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center mb-3">
-                                    <CheckCircle2 className="w-7 h-7 text-emerald-600" />
+                                <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center mb-3">
+                                    <CheckCircle2 className="w-7 h-7 text-emerald-400" />
                                 </div>
-                                <h3 className="font-display text-xl font-semibold text-slate-900">{'You\u2019re in!'}</h3>
-                                <p className="text-slate-600 mt-2">
+                                <h3 className="font-display text-xl font-semibold text-white">{'You\u2019re in!'}</h3>
+                                <p className="text-ink-2 mt-2">
                                     {'We\u2019ll WhatsApp you the joining link + \u20b950k resources before the live class.'}
                                 </p>
-                                <Button
-                                    onClick={() => handleOpenChange(false)}
-                                    className="mt-5 bg-[#0B0F14] hover:bg-black text-white rounded-xl"
-                                >
+                                <Button onClick={() => handleOpenChange(false)} className="mt-5 bg-white text-[#0B0F14] hover:bg-[#FFB872] rounded-xl">
                                     Close
                                 </Button>
                             </motion.div>
@@ -124,21 +115,21 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 noValidate
                             >
                                 <div>
-                                    <Label htmlFor="mc-name">Full name</Label>
+                                    <Label htmlFor="mc-name" className="text-ink-2">Full name</Label>
                                     <Input
                                         id="mc-name"
                                         data-testid={MASTERCLASS.nameInput}
                                         value={form.name}
                                         onChange={(e) => update('name', e.target.value)}
                                         placeholder="Aarav Sharma"
-                                        className="mt-1 h-12 rounded-xl"
+                                        className="mt-1 h-12 rounded-xl bg-white/5 border-white/12 text-white placeholder:text-ink-3"
                                         autoComplete="name"
                                     />
-                                    {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name}</p>}
+                                    {errors.name && <p className="text-xs text-rose-400 mt-1">{errors.name}</p>}
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
-                                        <Label htmlFor="mc-email">Email</Label>
+                                        <Label htmlFor="mc-email" className="text-ink-2">Email</Label>
                                         <Input
                                             id="mc-email"
                                             data-testid={MASTERCLASS.emailInput}
@@ -146,13 +137,13 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                             value={form.email}
                                             onChange={(e) => update('email', e.target.value)}
                                             placeholder="you@email.com"
-                                            className="mt-1 h-12 rounded-xl"
+                                            className="mt-1 h-12 rounded-xl bg-white/5 border-white/12 text-white placeholder:text-ink-3"
                                             autoComplete="email"
                                         />
-                                        {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
+                                        {errors.email && <p className="text-xs text-rose-400 mt-1">{errors.email}</p>}
                                     </div>
                                     <div>
-                                        <Label htmlFor="mc-phone">WhatsApp number</Label>
+                                        <Label htmlFor="mc-phone" className="text-ink-2">WhatsApp number</Label>
                                         <Input
                                             id="mc-phone"
                                             data-testid={MASTERCLASS.phoneInput}
@@ -160,19 +151,16 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                             value={form.phone}
                                             onChange={(e) => update('phone', e.target.value)}
                                             placeholder="+91 99999 99999"
-                                            className="mt-1 h-12 rounded-xl"
+                                            className="mt-1 h-12 rounded-xl bg-white/5 border-white/12 text-white placeholder:text-ink-3"
                                             autoComplete="tel"
                                         />
-                                        {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
+                                        {errors.phone && <p className="text-xs text-rose-400 mt-1">{errors.phone}</p>}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <Label>You are a…</Label>
-                                    <div
-                                        data-testid={MASTERCLASS.audienceSelect}
-                                        className="mt-2 grid grid-cols-2 gap-2"
-                                    >
+                                    <Label className="text-ink-2">You are a…</Label>
+                                    <div data-testid={MASTERCLASS.audienceSelect} className="mt-2 grid grid-cols-2 gap-2">
                                         {AUDIENCE_OPTIONS.map((opt) => (
                                             <button
                                                 key={opt.value}
@@ -180,8 +168,8 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                                 onClick={() => update('audience_type', opt.value)}
                                                 className={`text-left rounded-xl border px-3 py-2.5 text-sm transition-colors ${
                                                     form.audience_type === opt.value
-                                                        ? 'border-[#FF6A00] bg-[#FFF7EE] text-[#0B0F14]'
-                                                        : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                                                        ? 'border-[#FF6A00] bg-[#FF6A00]/15 text-white'
+                                                        : 'border-white/10 bg-white/3 text-ink-1 hover:bg-white/8'
                                                 }`}
                                             >
                                                 <span className="block font-medium">{opt.label}</span>
@@ -191,7 +179,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="mc-interest">What do you want AI to help with?</Label>
+                                    <Label htmlFor="mc-interest" className="text-ink-2">What do you want AI to help with?</Label>
                                     <Textarea
                                         id="mc-interest"
                                         data-testid={MASTERCLASS.interestInput}
@@ -199,12 +187,12 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                         onChange={(e) => update('interest', e.target.value)}
                                         rows={3}
                                         placeholder="e.g. save time on Instagram, write SEO blogs faster, grow my D2C brand"
-                                        className="mt-1 rounded-xl"
+                                        className="mt-1 rounded-xl bg-white/5 border-white/12 text-white placeholder:text-ink-3"
                                     />
                                 </div>
 
-                                <div className="flex items-center gap-2 text-xs text-slate-500">
-                                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                                <div className="flex items-center gap-2 text-xs text-ink-3">
+                                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
                                     No spam. WhatsApp reminders only. Unsubscribe anytime.
                                 </div>
 
@@ -212,7 +200,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                     type="submit"
                                     data-testid={MASTERCLASS.submitButton}
                                     disabled={submitting}
-                                    className="w-full h-12 bg-[#FF6A00] hover:bg-[#E85F00] active:bg-[#D45500] text-white rounded-xl text-base font-semibold shadow-[0_10px_24px_rgba(255,106,0,0.25)]"
+                                    className="w-full h-12 bg-[#FF6A00] hover:bg-[#FF8226] active:bg-[#E85F00] text-white rounded-xl text-base font-semibold btn-orange-glow"
                                 >
                                     {submitting ? (
                                         <>

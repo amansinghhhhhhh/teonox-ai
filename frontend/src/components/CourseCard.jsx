@@ -17,30 +17,28 @@ export const CourseCard = ({ course }) => {
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="tilt rounded-2xl bg-white border border-slate-200 p-5 shadow-[0_10px_30px_rgba(2,6,23,0.05)] flex flex-col h-full"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="tilt rounded-2xl card-elev p-5 flex flex-col h-full"
         >
             <div className="flex items-start justify-between gap-3">
-                <div className="w-11 h-11 rounded-xl bg-[#FFF1E2] text-[#FF6A00] grid place-items-center">
+                <div className="w-11 h-11 rounded-xl bg-[#FF6A00]/15 text-[#FF8A3D] grid place-items-center border border-[#FF6A00]/30">
                     <Icon className="w-5 h-5" />
                 </div>
-                <Badge variant="secondary" className="bg-slate-100 text-slate-700">{course.level}</Badge>
+                <Badge className="bg-white/5 text-ink-2 border border-white/10 hover:bg-white/5">{course.level}</Badge>
             </div>
-            <h4 className="font-display text-lg sm:text-xl font-semibold text-slate-900 mt-4 leading-snug">
-                {course.title}
-            </h4>
-            <p className="text-sm text-slate-600 mt-1">{course.subtitle}</p>
+            <h4 className="font-display text-lg sm:text-xl font-semibold text-white mt-4 leading-snug">{course.title}</h4>
+            <p className="text-sm text-ink-2 mt-1">{course.subtitle}</p>
 
             <ul className="mt-3 space-y-1.5">
                 {course.outcomes.slice(0, 3).map((o, i) => (
-                    <li key={i} className="text-xs text-slate-600 flex gap-2">
+                    <li key={i} className="text-xs text-ink-2 flex gap-2">
                         <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-[#FF6A00] mt-1.5" />
                         {o}
                     </li>
                 ))}
             </ul>
 
-            <div className="mt-4 flex items-center gap-3 text-xs text-slate-600">
+            <div className="mt-4 flex items-center gap-3 text-xs text-ink-2">
                 <span className="inline-flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     {course.duration}
@@ -51,20 +49,12 @@ export const CourseCard = ({ course }) => {
                 </span>
             </div>
 
-            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+            <div className="mt-5 pt-4 border-t border-white/8 flex items-center justify-between gap-2">
                 <div>
-                    <div className="text-base font-semibold text-slate-900">
-                        ₹{course.price_inr.toLocaleString('en-IN')}
-                    </div>
-                    <div className="text-xs text-slate-400 line-through">
-                        ₹{course.original_price_inr.toLocaleString('en-IN')}
-                    </div>
+                    <div className="text-base font-semibold text-white">₹{course.price_inr.toLocaleString('en-IN')}</div>
+                    <div className="text-xs text-ink-4 line-through">₹{course.original_price_inr.toLocaleString('en-IN')}</div>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => openMasterclass('library_card_' + course.id)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#0B0F14] hover:bg-black text-white px-4 py-2 text-sm font-medium"
-                >
+                <button type="button" onClick={() => openMasterclass('library_card_' + course.id)} className="inline-flex items-center gap-1.5 rounded-xl bg-[#FF6A00] hover:bg-[#FF8226] text-white px-4 py-2 text-sm font-medium btn-orange-glow">
                     Reserve seat
                     <ChevronRight className="w-4 h-4" />
                 </button>

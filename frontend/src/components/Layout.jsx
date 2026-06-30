@@ -12,11 +12,11 @@ export const Layout = () => {
     const stickyLabel = location.pathname === '/job-risk'
         ? 'Get my AI safety plan'
         : location.pathname === '/courses'
-            ? 'Get personal recommendations'
+            ? 'Reserve my free seat'
             : 'Join Free Masterclass';
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F7F8FA]">
+        <div className="min-h-screen flex flex-col bg-deep text-ink-1">
             <Header onOpenMasterclass={() => open('header_cta')} />
             <main className="flex-1 pb-24 lg:pb-0">
                 <Outlet />

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TeonoxLogo } from './TeonoxLogo';
-import { Button } from './ui/button';
 import { NAV } from '@/constants/testIds';
 import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
     { to: '/', label: 'Home' },
     { to: '/the-gap', label: 'The Gap' },
-    { to: '/courses', label: 'Explore Courses' },
+    { to: '/courses', label: 'Courses' },
     { to: '/results', label: 'Results' },
     { to: '/job-risk', label: 'AI aapki Job legi?' },
 ];
@@ -36,13 +35,13 @@ export const Header = ({ onOpenMasterclass }) => {
             className={cn(
                 'sticky top-0 z-40 w-full transition-[background-color,box-shadow,backdrop-filter] duration-200',
                 scrolled
-                    ? 'bg-white/90 backdrop-blur shadow-[0_6px_18px_rgba(2,6,23,0.05)] border-b border-slate-200/70'
-                    : 'bg-white border-b border-transparent',
+                    ? 'bg-[#060B1A]/85 backdrop-blur-xl border-b border-white/8 shadow-[0_8px_30px_rgba(0,0,0,0.45)]'
+                    : 'bg-transparent border-b border-transparent',
             )}
         >
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
                 <Link to="/" className="flex items-center focus-ring" aria-label="Teonox.ai home">
-                    <TeonoxLogo size={28} />
+                    <TeonoxLogo variant="light" size={28} />
                 </Link>
 
                 <nav data-testid={NAV.headerNav} className="hidden lg:flex items-center gap-1">
@@ -53,10 +52,10 @@ export const Header = ({ onOpenMasterclass }) => {
                             end={item.to === '/'}
                             className={({ isActive }) =>
                                 cn(
-                                    'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                                    'px-3.5 py-2 rounded-lg text-sm font-medium transition-colors',
                                     isActive
-                                        ? 'text-[#0B0F14] bg-slate-100'
-                                        : 'text-slate-600 hover:text-[#0B0F14] hover:bg-slate-50',
+                                        ? 'text-white bg-white/10'
+                                        : 'text-white/70 hover:text-white hover:bg-white/5',
                                 )
                             }
                         >
@@ -66,18 +65,20 @@ export const Header = ({ onOpenMasterclass }) => {
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    <Button
+                    <button
+                        type="button"
                         data-testid={NAV.headerCta}
                         onClick={onOpenMasterclass}
-                        className="hidden sm:inline-flex bg-[#FF6A00] hover:bg-[#E85F00] active:bg-[#D45500] text-white rounded-xl shadow-[0_8px_22px_rgba(255,106,0,0.25)] focus-visible:ring-2 focus-visible:ring-[#FF6A00]/40"
+                        className="hidden sm:inline-flex items-center gap-2 group rounded-xl bg-[#FF6A00] hover:bg-[#FF8226] active:bg-[#E85F00] text-white px-4 py-2.5 text-sm font-semibold transition-colors btn-orange-glow"
                     >
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Free Masterclass
-                    </Button>
+                        <Sparkles className="w-4 h-4" />
+                        <span>Free Masterclass</span>
+                        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </button>
                     <button
                         type="button"
                         data-testid={NAV.mobileToggle}
-                        className="lg:hidden p-2 rounded-lg border border-slate-200 hover:bg-slate-50 focus-ring"
+                        className="lg:hidden p-2 rounded-lg border border-white/10 text-white/80 hover:bg-white/5 focus-ring"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label="Toggle navigation"
                         aria-expanded={mobileOpen}
@@ -93,8 +94,8 @@ export const Header = ({ onOpenMasterclass }) => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        className="lg:hidden overflow-hidden bg-white border-t border-slate-200"
+                        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                        className="lg:hidden overflow-hidden bg-[#060B1A] border-t border-white/8"
                     >
                         <nav data-testid={NAV.mobileNav} className="px-4 py-3 flex flex-col gap-1">
                             {NAV_ITEMS.map((item) => (
@@ -105,23 +106,24 @@ export const Header = ({ onOpenMasterclass }) => {
                                     className={({ isActive }) =>
                                         cn(
                                             'px-3 py-3 rounded-lg text-base font-medium',
-                                            isActive ? 'bg-slate-100 text-[#0B0F14]' : 'text-slate-700 hover:bg-slate-50',
+                                            isActive ? 'bg-white/10 text-white' : 'text-white/75 hover:bg-white/5',
                                         )
                                     }
                                 >
                                     {item.label}
                                 </NavLink>
                             ))}
-                            <Button
+                            <button
+                                type="button"
                                 onClick={() => {
                                     setMobileOpen(false);
                                     onOpenMasterclass?.();
                                 }}
-                                className="mt-2 w-full bg-[#FF6A00] hover:bg-[#E85F00] text-white rounded-xl"
+                                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-[#FF6A00] hover:bg-[#FF8226] text-white rounded-xl px-4 py-3 font-semibold"
                             >
-                                <Sparkles className="w-4 h-4 mr-2" />
+                                <Sparkles className="w-4 h-4" />
                                 Join Free Masterclass
-                            </Button>
+                            </button>
                         </nav>
                     </motion.div>
                 )}
