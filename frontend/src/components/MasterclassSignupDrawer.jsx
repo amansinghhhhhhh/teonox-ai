@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
@@ -15,10 +15,15 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^[+\d][\d\s\-()]{5,18}$/;
 
 export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_masterclass' }) => {
-    const [form, setForm] = useState({ name: '', email: '', phone: '', audience_type: 'professional', interest: '' });
+    const [form, setForm] = useState({ name: '', email: '', phone: '', audience_type: 'professional', interest: '', website: '' });
     const [errors, setErrors] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [formStartedAt, setFormStartedAt] = useState(Date.now());
+
+    useEffect(() => {
+        if (open) setFormStartedAt(Date.now());
+    }, [open]);
 
     const update = (k, v) => {
         setForm((f) => ({ ...f, [k]: v }));
@@ -39,7 +44,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
         if (!validate()) return;
         setSubmitting(true);
         try {
-            await createLead({ ...form, source });
+            await createLead({ ...form, source, form_started_at: formStartedAt });
             setSuccess(true);
             toast.success('You\u2019re in! Check WhatsApp for the joining link.');
         } catch (err) {
@@ -113,6 +118,16 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 className="space-y-4 pt-4"
                                 noValidate
                             >
+                                <input
+                                    type="text"
+                                    name="website"
+                                    value={form.website}
+                                    onChange={(e) => update('website', e.target.value)}
+                                    tabIndex="-1"
+                                    autoComplete="off"
+                                    aria-hidden="true"
+                                    className="hidden"
+                                />
                                 <div>
                                     <Label htmlFor="mc-name" className="text-ink-2">Full name</Label>
                                     <Input

@@ -19,6 +19,24 @@ const QUICK_PROMPTS = [
     'I want to learn AI from scratch',
 ];
 
+const VAGUE_MESSAGES = new Set(['hi', 'hello', 'hey', 'help', 'yes', 'yeah', 'ok', 'okay', 'idk', "i don't know", 'not sure', 'ai']);
+
+const wordCount = (text) => (text.match(/[A-Za-z0-9]+/g) || []).length;
+
+const isUnderqualifiedCourseMessage = (text) => {
+    const value = text.trim().toLowerCase();
+    if (VAGUE_MESSAGES.has(value)) return true;
+    if (value.length < 18 || wordCount(value) < 4) return true;
+    const signals = [
+        'want', 'need', 'learn', 'save', 'grow', 'job', 'career', 'business', 'brand',
+        'marketing', 'design', 'seo', 'internship', 'course', 'skill', 'ai', 'work',
+        'content', 'sales', 'instagram', 'linkedin',
+    ];
+    return !signals.some((signal) => value.includes(signal));
+};
+
+const aiErrorDetail = (err) => err?.response?.data?.detail;
+
 export const CourseConsultant = ({ courses = [] }) => {
     const [step, setStep] = useState('audience');
     const [audience, setAudience] = useState('professional');
@@ -41,11 +59,21 @@ export const CourseConsultant = ({ courses = [] }) => {
     const sendTurn = async (text) => {
         const userText = text.trim();
         if (!userText || busy) return;
+        const isFirst = messages.length === 0;
         setMessages((m) => [...m, { role: 'user', text: userText }]);
         setInput('');
+        if (isFirst && isUnderqualifiedCourseMessage(userText)) {
+            setMessages((m) => [
+                ...m,
+                {
+                    role: 'assistant',
+                    text: 'Tell me one goal or pain point first, like saving time on Instagram, getting an internship, or growing your business. Then I can recommend properly.',
+                },
+            ]);
+            return;
+        }
         setBusy(true);
         try {
-            const isFirst = messages.length === 0;
             const res = await consultantMessage({
                 session_id: sessionId,
                 audience_type: audience,
@@ -58,6 +86,22 @@ export const CourseConsultant = ({ courses = [] }) => {
             if (Array.isArray(res.course_ranking)) setRanking(res.course_ranking);
         } catch (err) {
             console.error(err);
+            const detail = aiErrorDetail(err);
+            if (detail?.code === 'feature_daily_limit' && detail?.usage?.lead_required) {
+                setMessages((m) => [
+                    ...m,
+                    { role: 'assistant', text: 'I can keep refining this after you reserve your free seat.' },
+                ]);
+                openMasterclass('course_consultant_ai_limit');
+                return;
+            }
+            if (detail?.code) {
+                setMessages((m) => [
+                    ...m,
+                    { role: 'assistant', text: detail.message || 'Please wait a little before continuing.' },
+                ]);
+                return;
+            }
             toast.error('AI is taking a breath. Try again.');
             setMessages((m) => [...m, { role: 'assistant', text: 'Sorry, my brain hiccupped. Try once more?' }]);
         } finally {
@@ -94,7 +138,7 @@ export const CourseConsultant = ({ courses = [] }) => {
                             </div>
                             <div>
                                 <div className="text-sm font-semibold text-white">AI Course Consultant</div>
-                                <div className="text-xs text-ink-3">Powered by Claude Sonnet 4.5</div>
+                                <div className="text-xs text-ink-3">Personalized course guidance</div>
                             </div>
                         </div>
                         {step === 'chat' && (

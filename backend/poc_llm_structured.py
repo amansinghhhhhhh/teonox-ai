@@ -1,5 +1,5 @@
 """
-POC: Validate Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) returns reliable
+POC: Validate the configured Groq chat model returns reliable
 chat + strict JSON for the two core Teonox.ai AI features:
 
   1) AI Course Consultant — chat reply + course ranking JSON (course_id,
@@ -21,13 +21,14 @@ import uuid
 from typing import Any, Dict, List, Tuple
 
 from dotenv import load_dotenv
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from groq import AsyncGroq
 
 load_dotenv()
 
-EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY")
-MODEL_PROVIDER = "anthropic"
-MODEL_NAME = "claude-sonnet-4-5-20250929"
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+MODEL_NAME = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+MODEL_TEMPERATURE = float(os.environ.get("GROQ_TEMPERATURE", "0.2"))
+MODEL_MAX_COMPLETION_TOKENS = int(os.environ.get("GROQ_MAX_COMPLETION_TOKENS", "4096"))
 
 # ---------------------------------------------------------------------------
 # 7 pilot courses (canonical IDs used across the app)
@@ -294,48 +295,62 @@ def validate_risk(payload: Dict[str, Any]) -> Tuple[bool, str]:
 # LLM call wrappers (with retry-on-parse-failure correction prompt)
 # ---------------------------------------------------------------------------
 
-async def call_with_retry(chat: LlmChat, user_text: str, validate_fn, max_retries: int = 2):
+async def send_chat(messages: List[Dict[str, str]]) -> str:
+    client = AsyncGroq(api_key=GROQ_API_KEY)
+    completion = await client.chat.completions.create(
+        messages=messages,
+        model=MODEL_NAME,
+        temperature=MODEL_TEMPERATURE,
+        max_completion_tokens=MODEL_MAX_COMPLETION_TOKENS,
+    )
+    return completion.choices[0].message.content or ""
+
+
+async def call_with_retry(messages: List[Dict[str, str]], user_text: str, validate_fn, max_retries: int = 2):
     """Send a message; if parsing/validation fails, send a correction prompt."""
     last_raw = ""
     last_err = ""
+    attempt_messages = [*messages, {"role": "user", "content": user_text}]
     for attempt in range(max_retries + 1):
-        if attempt == 0:
-            msg = UserMessage(text=user_text)
-        else:
+        if attempt > 0:
             correction = (
                 "Your previous response was not valid. Error: "
                 f"{last_err}. Re-emit the SAME answer, but as a single JSON object inside a "
                 "```json ... ``` fenced block matching the schema exactly. Do not include any prose "
                 "before or after the code fence."
             )
-            msg = UserMessage(text=correction)
-        raw = await chat.send_message(msg)
+            attempt_messages.append({"role": "user", "content": correction})
+        raw = await send_chat(attempt_messages)
         last_raw = raw or ""
         try:
             payload = extract_json(last_raw)
         except Exception as e:
             last_err = f"JSON extract failed: {e}"
+            attempt_messages.append({"role": "assistant", "content": last_raw})
             continue
         ok, why = validate_fn(payload)
         if ok:
+            messages.extend(
+                [
+                    {"role": "user", "content": user_text},
+                    {"role": "assistant", "content": last_raw},
+                ]
+            )
             return True, payload, last_raw, attempt
         last_err = f"schema invalid: {why}"
+        attempt_messages.append({"role": "assistant", "content": last_raw})
     return False, None, last_raw, max_retries
 
 
 async def run_consultant_session(turns: List[Dict[str, str]]) -> Dict[str, Any]:
     """Run a multi-turn consultant conversation, return summary stats."""
     session_id = f"poc-consultant-{uuid.uuid4()}"
-    chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
-        session_id=session_id,
-        system_message=CONSULTANT_SYSTEM_PROMPT,
-    ).with_model(MODEL_PROVIDER, MODEL_NAME)
+    messages = [{"role": "system", "content": CONSULTANT_SYSTEM_PROMPT}]
 
     results = []
     for t in turns:
         ok, payload, raw, attempts = await call_with_retry(
-            chat, t["text"], validate_consultant, max_retries=2
+            messages, t["text"], validate_consultant, max_retries=2
         )
         results.append({
             "input": t["text"],
@@ -349,15 +364,11 @@ async def run_consultant_session(turns: List[Dict[str, str]]) -> Dict[str, Any]:
 
 async def run_risk_session(turns: List[Dict[str, str]]) -> Dict[str, Any]:
     session_id = f"poc-risk-{uuid.uuid4()}"
-    chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
-        session_id=session_id,
-        system_message=JOB_RISK_SYSTEM_PROMPT,
-    ).with_model(MODEL_PROVIDER, MODEL_NAME)
+    messages = [{"role": "system", "content": JOB_RISK_SYSTEM_PROMPT}]
     results = []
     for t in turns:
         ok, payload, raw, attempts = await call_with_retry(
-            chat, t["text"], validate_risk, max_retries=2
+            messages, t["text"], validate_risk, max_retries=2
         )
         results.append({
             "input": t["text"],
@@ -426,11 +437,11 @@ RISK_SESSIONS: List[List[Dict[str, str]]] = [
 # ---------------------------------------------------------------------------
 
 async def main():
-    if not EMERGENT_LLM_KEY:
-        print("ERROR: EMERGENT_LLM_KEY missing in env")
+    if not GROQ_API_KEY:
+        print("ERROR: GROQ_API_KEY missing in env")
         return
 
-    print(f"Using model: {MODEL_PROVIDER}/{MODEL_NAME}")
+    print(f"Using Groq model: {MODEL_NAME}")
     print(f"Catalog size: {len(PILOT_COURSES)}")
     print("=" * 80)
 

@@ -11,12 +11,13 @@ Endpoints:
 - POST /api/ai/job-risk/reset             -> drop session memory
 """
 
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import re
 import uuid
 from pathlib import Path
 from datetime import datetime, timezone
@@ -25,6 +26,12 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 
 from courses_data import PILOT_COURSES
 from ai_service import consultant_turn, job_risk_turn, forget_session
+from usage_control import (
+    AIUsageError,
+    check_and_record_ai_usage,
+    create_ai_access_token,
+    usage_snapshot,
+)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
@@ -83,6 +90,8 @@ class LeadCreate(BaseModel):
     audience_type: AudienceType
     interest: Optional[str] = Field(default="", max_length=600)
     source: Optional[str] = Field(default="home_masterclass", max_length=80)
+    website: Optional[str] = Field(default="", max_length=200)
+    form_started_at: Optional[float] = None
 
 
 class Lead(BaseModel):
@@ -94,6 +103,7 @@ class Lead(BaseModel):
     interest: str
     source: str
     created_at: datetime
+    ai_access_token: str
 
 
 class ConsultantTurnIn(BaseModel):
@@ -115,6 +125,55 @@ class ResetSessionIn(BaseModel):
     session_id: str
 
 
+_VAGUE_RE = re.compile(r"^(hi|hello|hey|help|yes|yeah|ok|okay|idk|i don't know|not sure|student|professional|business owner|parent|ai)$", re.I)
+
+
+def _word_count(text: str) -> int:
+    return len(re.findall(r"[A-Za-z0-9]+", text or ""))
+
+
+def _is_underqualified_consultant_message(message: str) -> bool:
+    text = (message or "").strip().lower()
+    if _VAGUE_RE.match(text):
+        return True
+    if _word_count(text) < 4 or len(text) < 18:
+        return True
+    signals = (
+        "want", "need", "learn", "save", "grow", "job", "career", "business", "brand",
+        "marketing", "design", "seo", "internship", "course", "skill", "ai", "work",
+        "content", "sales", "instagram", "linkedin",
+    )
+    return not any(signal in text for signal in signals)
+
+
+def _is_underqualified_job_risk_message(message: str) -> bool:
+    text = (message or "").strip().lower()
+    if _VAGUE_RE.match(text):
+        return True
+    if _word_count(text) < 4 or len(text) < 16:
+        return True
+    task_signals = (
+        "write", "make", "create", "design", "call", "sell", "manage", "reply", "support",
+        "post", "schedule", "analyze", "report", "code", "review", "edit", "research",
+        "daily", "most days", "tools", "canva", "excel", "figma", "ads", "clients",
+    )
+    return not any(signal in text for signal in task_signals)
+
+
+def _is_underqualified_job_role(role: str) -> bool:
+    text = (role or "").strip().lower()
+    return not text or _VAGUE_RE.match(text)
+
+
+def _form_elapsed_seconds(started_at: Optional[float]) -> Optional[float]:
+    if started_at is None:
+        return None
+    timestamp = float(started_at)
+    if timestamp > 10_000_000_000:
+        timestamp = timestamp / 1000
+    return datetime.now(timezone.utc).timestamp() - timestamp
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -131,6 +190,13 @@ async def get_courses():
 
 @api_router.post("/leads", response_model=Lead)
 async def create_lead(payload: LeadCreate):
+    if (payload.website or "").strip():
+        raise HTTPException(status_code=400, detail="Invalid submission")
+    min_seconds = int(os.environ.get("LEAD_MIN_FORM_SECONDS", "3"))
+    elapsed = _form_elapsed_seconds(payload.form_started_at)
+    if elapsed is None or elapsed < min_seconds:
+        raise HTTPException(status_code=400, detail="Please try submitting the form again")
+
     lead_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc)
     doc = {
@@ -144,6 +210,11 @@ async def create_lead(payload: LeadCreate):
         "created_at": now.isoformat(),
     }
     await db.leads.insert_one(doc)
+    ai_access_token = create_ai_access_token(
+        lead_id=lead_id,
+        email=doc["email"],
+        audience_type=doc["audience_type"],
+    )
     return Lead(
         id=lead_id,
         name=doc["name"],
@@ -153,6 +224,7 @@ async def create_lead(payload: LeadCreate):
         interest=doc["interest"],
         source=doc["source"],
         created_at=now,
+        ai_access_token=ai_access_token,
     )
 
 
@@ -166,8 +238,25 @@ async def list_leads(limit: int = 100):
 # --- AI: Course Consultant ------------------------------------------------
 
 @api_router.post("/ai/course-consultant/message")
-async def consultant_message(payload: ConsultantTurnIn):
+async def consultant_message(payload: ConsultantTurnIn, request: Request):
     session_id = payload.session_id or f"consultant-{uuid.uuid4()}"
+    if payload.is_first_turn and _is_underqualified_consultant_message(payload.message):
+        usage = await usage_snapshot(db, request, "consultant")
+        return {
+            "session_id": session_id,
+            "attempts": 0,
+            "static": True,
+            "assistant_message": "Tell me one goal or pain point first, like saving time on Instagram, getting an internship, or growing your business. Then I can recommend properly.",
+            "course_ranking": [],
+            "ready_to_recommend": False,
+            "usage": usage,
+        }
+
+    try:
+        usage = await check_and_record_ai_usage(db, request, "consultant", payload.message)
+    except AIUsageError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail())
+
     try:
         result = await consultant_turn(
             session_id=session_id,
@@ -192,12 +281,14 @@ async def consultant_message(payload: ConsultantTurnIn):
                 "is_first_turn": payload.is_first_turn,
                 "attempts": result.get("attempts"),
                 "ready_to_recommend": result.get("ready_to_recommend"),
+                "usage_remaining": usage.get("remaining"),
+                "usage_limit": usage.get("limit"),
                 "created_at": datetime.now(timezone.utc).isoformat(),
             }
         )
     except Exception:
         pass
-    return {"session_id": session_id, **result}
+    return {"session_id": session_id, **result, "usage": usage}
 
 
 @api_router.post("/ai/course-consultant/reset")
@@ -209,8 +300,33 @@ async def consultant_reset(payload: ResetSessionIn):
 # --- AI: Job Risk Analyzer ------------------------------------------------
 
 @api_router.post("/ai/job-risk/message")
-async def job_risk_message(payload: JobRiskTurnIn):
+async def job_risk_message(payload: JobRiskTurnIn, request: Request):
     session_id = payload.session_id or f"jobrisk-{uuid.uuid4()}"
+    if payload.is_first_turn:
+        role_missing = _is_underqualified_job_role(payload.role or "")
+        task_missing = _is_underqualified_job_risk_message(payload.message)
+        if role_missing or task_missing:
+            usage = await usage_snapshot(db, request, "job_risk")
+            assistant_message = (
+                "Tell me your role first, like social media manager or accounts executive, then share 2-3 daily tasks. Then I can give you a useful risk read."
+                if role_missing
+                else "Share 2-3 daily tasks first, like writing captions, handling DMs, building reports, or using Canva/Figma/Excel. Then I can give you a useful risk read."
+            )
+            return {
+                "session_id": session_id,
+                "attempts": 0,
+                "static": True,
+                "assistant_message": assistant_message,
+                "risk": None,
+                "confidence": 0,
+                "usage": usage,
+            }
+
+    try:
+        usage = await check_and_record_ai_usage(db, request, "job_risk", payload.message)
+    except AIUsageError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail())
+
     try:
         result = await job_risk_turn(
             session_id=session_id,
@@ -233,12 +349,14 @@ async def job_risk_message(payload: JobRiskTurnIn):
                 "attempts": result.get("attempts"),
                 "probability": result.get("risk", {}).get("probability"),
                 "severity": result.get("risk", {}).get("severity"),
+                "usage_remaining": usage.get("remaining"),
+                "usage_limit": usage.get("limit"),
                 "created_at": datetime.now(timezone.utc).isoformat(),
             }
         )
     except Exception:
         pass
-    return {"session_id": session_id, **result}
+    return {"session_id": session_id, **result, "usage": usage}
 
 
 @api_router.post("/ai/job-risk/reset")

@@ -19,6 +19,24 @@ const SAMPLE_ROLES = [
     'Accounts executive',
 ];
 
+const VAGUE_MESSAGES = new Set(['hi', 'hello', 'hey', 'help', 'yes', 'yeah', 'ok', 'okay', 'idk', "i don't know", 'not sure', 'ai']);
+
+const wordCount = (text) => (text.match(/[A-Za-z0-9]+/g) || []).length;
+
+const isUnderqualifiedJobRiskMessage = (text) => {
+    const value = text.trim().toLowerCase();
+    if (VAGUE_MESSAGES.has(value)) return true;
+    if (value.length < 16 || wordCount(value) < 4) return true;
+    const taskSignals = [
+        'write', 'make', 'create', 'design', 'call', 'sell', 'manage', 'reply', 'support',
+        'post', 'schedule', 'analyze', 'report', 'code', 'review', 'edit', 'research',
+        'daily', 'most days', 'tools', 'canva', 'excel', 'figma', 'ads', 'clients',
+    ];
+    return !taskSignals.some((signal) => value.includes(signal));
+};
+
+const aiErrorDetail = (err) => err?.response?.data?.detail;
+
 export const JobRiskChat = ({ courses = [] }) => {
     const [step, setStep] = useState('role');
     const [role, setRole] = useState('');
@@ -36,11 +54,21 @@ export const JobRiskChat = ({ courses = [] }) => {
     const sendTurn = async (text) => {
         const t = text.trim();
         if (!t || busy) return;
+        const isFirst = messages.length === 0;
         setMessages((m) => [...m, { role: 'user', text: t }]);
         setInput('');
+        if (isFirst && isUnderqualifiedJobRiskMessage(t)) {
+            setMessages((m) => [
+                ...m,
+                {
+                    role: 'assistant',
+                    text: 'Share 2-3 daily tasks first, like writing captions, handling DMs, building reports, or using Canva/Figma/Excel. Then I can give you a useful risk read.',
+                },
+            ]);
+            return;
+        }
         setBusy(true);
         try {
-            const isFirst = messages.length === 0;
             const res = await jobRiskMessage({
                 session_id: sessionId,
                 role,
@@ -53,6 +81,22 @@ export const JobRiskChat = ({ courses = [] }) => {
             setConfidence(res.confidence || 0);
         } catch (err) {
             console.error(err);
+            const detail = aiErrorDetail(err);
+            if (detail?.code === 'feature_daily_limit' && detail?.usage?.lead_required) {
+                setMessages((m) => [
+                    ...m,
+                    { role: 'assistant', text: 'I can make this more specific after you reserve your free seat.' },
+                ]);
+                openMasterclass('job_risk_ai_limit');
+                return;
+            }
+            if (detail?.code) {
+                setMessages((m) => [
+                    ...m,
+                    { role: 'assistant', text: detail.message || 'Please wait a little before continuing.' },
+                ]);
+                return;
+            }
             toast.error('AI is taking a breath. Try again.');
             setMessages((m) => [...m, { role: 'assistant', text: 'Sorry, my brain hiccupped. Try once more?' }]);
         } finally {

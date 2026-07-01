@@ -353,7 +353,7 @@
       },
       "footer": {
         "sections": ["Trust strip", "Links", "Contact/WhatsApp", "Mini signup"],
-        "trust_items": ["Made in India", "Live sessions", "Templates worth ₹50,000", "Claude-powered consultant"],
+        "trust_items": ["Made in India", "Live sessions", "Templates worth ₹50,000", "Groq-powered consultant"],
         "data_testid": "site-footer"
       }
     },

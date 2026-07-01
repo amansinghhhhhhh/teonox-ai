@@ -6,10 +6,11 @@ Tests all 9 endpoints with realistic payloads and strict validation.
 import requests
 import sys
 import json
+import os
 from datetime import datetime
 from typing import Dict, Any, List
 
-BASE_URL = "https://learn-teonox-ai.preview.emergentagent.com/api"
+BASE_URL = os.environ.get("BACKEND_API_URL", "http://localhost:8000/api")
 
 # Canonical course IDs from courses_data.py
 COURSE_IDS = [
@@ -126,7 +127,7 @@ class TeonoxAPITester:
 
     def validate_lead(self, payload: Dict) -> tuple[bool, str]:
         """Validate POST /api/leads response."""
-        required = ["id", "name", "email", "phone", "audience_type", "created_at"]
+        required = ["id", "name", "email", "phone", "audience_type", "created_at", "ai_access_token"]
         for field in required:
             if field not in payload:
                 return False, f"Missing field: {field}"
@@ -243,6 +244,7 @@ class TeonoxAPITester:
             "audience_type": "professional",
             "interest": "AI for marketing",
             "source": "test_suite",
+            "form_started_at": datetime.now().timestamp() - 5,
         }
         self.test("POST /api/leads (valid)", "POST", "/leads", 200, data=lead_payload, validate_fn=self.validate_lead)
 

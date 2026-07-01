@@ -1,4 +1,4 @@
-"""Teonox.ai AI services — thin async wrappers around Claude Sonnet 4.5
+"""Teonox.ai AI services — thin async wrappers around Groq chat models
 that power the Course Consultant chat and the Job Risk Analyzer chat.
 
 Proven via /app/backend/poc_llm_structured.py (17/17 = 100% strict JSON parse).
@@ -10,14 +10,15 @@ import json
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from groq import AsyncGroq
 
 from courses_data import COURSE_CATALOG_TEXT, COURSE_IDS
 
 log = logging.getLogger(__name__)
 
-MODEL_PROVIDER = "anthropic"
-MODEL_NAME = "claude-sonnet-4-5-20250929"
+MODEL_NAME = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+MODEL_TEMPERATURE = float(os.environ.get("GROQ_TEMPERATURE", "0.2"))
+MODEL_MAX_COMPLETION_TOKENS = int(os.environ.get("GROQ_MAX_COMPLETION_TOKENS", "4096"))
 
 # ---------------------------------------------------------------------------
 # System prompts (validated in POC)
@@ -202,48 +203,70 @@ def _validate_risk(payload: Dict[str, Any]) -> Tuple[bool, str]:
 # Per-session chat instances (in-memory) — persistence is handled by Mongo logs
 # ---------------------------------------------------------------------------
 
-_session_cache: Dict[str, LlmChat] = {}
+_groq_client: Optional[AsyncGroq] = None
+_session_cache: Dict[str, List[Dict[str, str]]] = {}
 
 
-def _get_or_create_chat(session_id: str, system_prompt: str) -> LlmChat:
+def _get_groq_client() -> AsyncGroq:
+    global _groq_client
+    if _groq_client is not None:
+        return _groq_client
+    api_key = os.environ.get("GROQ_API_KEY")
+    if not api_key:
+        raise RuntimeError("GROQ_API_KEY not configured")
+    _groq_client = AsyncGroq(api_key=api_key)
+    return _groq_client
+
+
+def _get_or_create_messages(session_id: str, system_prompt: str) -> List[Dict[str, str]]:
     if session_id in _session_cache:
         return _session_cache[session_id]
-    api_key = os.environ.get("EMERGENT_LLM_KEY")
-    if not api_key:
-        raise RuntimeError("EMERGENT_LLM_KEY not configured")
-    chat = LlmChat(
-        api_key=api_key,
-        session_id=session_id,
-        system_message=system_prompt,
-    ).with_model(MODEL_PROVIDER, MODEL_NAME)
-    _session_cache[session_id] = chat
-    return chat
+    messages = [{"role": "system", "content": system_prompt}]
+    _session_cache[session_id] = messages
+    return messages
 
 
-async def _call_with_retry(chat: LlmChat, user_text: str, validator, max_retries: int = 2):
+async def _send_chat(messages: List[Dict[str, str]]) -> str:
+    completion = await _get_groq_client().chat.completions.create(
+        messages=messages,
+        model=MODEL_NAME,
+        temperature=MODEL_TEMPERATURE,
+        max_completion_tokens=MODEL_MAX_COMPLETION_TOKENS,
+    )
+    return completion.choices[0].message.content or ""
+
+
+async def _call_with_retry(messages: List[Dict[str, str]], user_text: str, validator, max_retries: int = 2):
     last_err: Optional[str] = None
     last_raw: str = ""
+    attempt_messages = [*messages, {"role": "user", "content": user_text}]
     for attempt in range(max_retries + 1):
-        if attempt == 0:
-            msg = UserMessage(text=user_text)
-        else:
+        if attempt > 0:
             correction = (
                 "Your previous response was not valid. Error: "
                 f"{last_err}. Re-emit the SAME answer as a single JSON object inside a "
                 "```json ... ``` fenced block matching the schema exactly. No prose before or after."
             )
-            msg = UserMessage(text=correction)
-        raw = await chat.send_message(msg)
+            attempt_messages.append({"role": "user", "content": correction})
+        raw = await _send_chat(attempt_messages)
         last_raw = raw or ""
         try:
             payload = _extract_json(last_raw)
         except Exception as e:
             last_err = f"json extract: {e}"
+            attempt_messages.append({"role": "assistant", "content": last_raw})
             continue
         ok, why = validator(payload)
         if ok:
+            messages.extend(
+                [
+                    {"role": "user", "content": user_text},
+                    {"role": "assistant", "content": last_raw},
+                ]
+            )
             return payload, last_raw, attempt + 1
         last_err = f"schema: {why}"
+        attempt_messages.append({"role": "assistant", "content": last_raw})
     raise RuntimeError(f"LLM failed after retries: {last_err} | raw_excerpt={last_raw[:200]!r}")
 
 
@@ -254,7 +277,7 @@ async def consultant_turn(
     user_message: str,
     is_first_turn: bool = False,
 ) -> Dict[str, Any]:
-    chat = _get_or_create_chat(session_id, CONSULTANT_SYSTEM_PROMPT)
+    messages = _get_or_create_messages(session_id, CONSULTANT_SYSTEM_PROMPT)
     if is_first_turn:
         framed = (
             f"User profile: audience_type={audience_type}; specialization={specialization or 'unspecified'}.\n"
@@ -262,7 +285,7 @@ async def consultant_turn(
         )
     else:
         framed = user_message
-    payload, _, attempts = await _call_with_retry(chat, framed, _validate_consultant)
+    payload, _, attempts = await _call_with_retry(messages, framed, _validate_consultant)
     return {"attempts": attempts, **payload}
 
 
@@ -272,7 +295,7 @@ async def job_risk_turn(
     user_message: str,
     is_first_turn: bool = False,
 ) -> Dict[str, Any]:
-    chat = _get_or_create_chat(session_id, JOB_RISK_SYSTEM_PROMPT)
+    messages = _get_or_create_messages(session_id, JOB_RISK_SYSTEM_PROMPT)
     if is_first_turn:
         framed = (
             f"User self-described role: {role or 'unspecified'}.\n"
@@ -280,7 +303,7 @@ async def job_risk_turn(
         )
     else:
         framed = user_message
-    payload, _, attempts = await _call_with_retry(chat, framed, _validate_risk)
+    payload, _, attempts = await _call_with_retry(messages, framed, _validate_risk)
     return {"attempts": attempts, **payload}
 
 

@@ -3,7 +3,7 @@
 ## 1) Objectives
 - Build a mobile-first, multi-page landing site that converts 4 audiences (students, professionals, business owners, parents) into **Free Live Masterclass** signups.
 - Establish trust via “The Gap” narrative: most AI courses are incomplete; Teonox teaches job-used, practical AI workflows.
-- Deliver 2 core AI experiences powered by **Claude Sonnet 4.5** that drive personalization:
+- Deliver 2 core AI experiences using **Groq-hosted chat models** for personalization:
   - **AI Course Consultant** (chat + structured course ranking for live reshuffle UI)
   - **“AI aapki Job legi?” Risk Analyzer** (chat + structured risk metrics for infographic + course recommendations)
 - Create updated **teonox.ai** logo (heritage-inspired, not identical) and modern brand system (charcoal/navy + orange + white, subtle AI hint).
@@ -11,11 +11,11 @@
 ## 2) Implementation Steps (Phased)
 
 ### Phase 1 — Core POC (Isolation) ✅ must pass before app work
-**Goal:** Prove Claude can reliably return **(a) human chat text + (b) strict JSON** for live UI updates.
+**Goal:** Prove the configured Groq model can reliably return **(a) human chat text + (b) strict JSON** for live UI updates.
 
 **Build (single Python script):**
-- Websearch: best practice for Anthropic/Claude structured outputs + JSON schema prompting + retry strategies.
-- Implement `poc_llm_structured.py` using `emergentintegrations` (Claude Sonnet 4.5) with two functions:
+- Websearch: best practice for Groq structured outputs + JSON schema prompting + retry strategies.
+- Implement `poc_llm_structured.py` using the Groq Python SDK with two functions:
   1) `course_consultant(profile_type, specialization, user_message)` → returns:
      - `assistant_message` (string)
      - `course_ranking[]`: `{course_id, match_percentage(0-100), label, reason}`

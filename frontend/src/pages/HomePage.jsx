@@ -242,7 +242,7 @@ export default function HomePage() {
                                 {/* Mini-info row */}
                                 <div className="mt-4 flex items-center justify-center gap-2 text-xs text-ink-3">
                                     <Bot className="w-3.5 h-3.5 text-[#FF7A1A]" />
-                                    Powered by Claude Sonnet 4.5
+                                    Personalized AI guidance
                                 </div>
                             </div>
                         </div>

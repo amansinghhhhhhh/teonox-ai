@@ -37,7 +37,7 @@ export const Footer = ({ onOpenMasterclass }) => {
                         'Made in India',
                         'Live cohorts + recordings',
                         'Templates worth ₹50,000',
-                        'Claude Sonnet 4.5 powered',
+                        'Hands-on projects',
                     ].map((t) => (
                         <div key={t} className="flex items-center gap-2 text-sm text-white/70">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#E85F00]" />
@@ -89,7 +89,7 @@ export const Footer = ({ onOpenMasterclass }) => {
 
                 <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <p className="text-xs text-white/45">© {new Date().getFullYear()} teonox.ai — Learn. Apply. Lead.</p>
-                    <p className="text-xs text-white/45">Built mobile-first • Powered by Claude Sonnet 4.5</p>
+                    <p className="text-xs text-white/45">Built mobile-first for practical AI learning</p>
                 </div>
             </div>
         </footer>
