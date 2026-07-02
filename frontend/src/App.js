@@ -10,6 +10,7 @@ import GapPage from '@/pages/GapPage';
 import CoursesPage from '@/pages/CoursesPage';
 import ResultsPage from '@/pages/ResultsPage';
 import JobRiskPage from '@/pages/JobRiskPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -32,6 +33,7 @@ function App() {
                             <Route path="/courses" element={<CoursesPage />} />
                             <Route path="/results" element={<ResultsPage />} />
                             <Route path="/job-risk" element={<JobRiskPage />} />
+                            <Route path="*" element={<NotFoundPage />} />
                         </Route>
                     </Routes>
                     <Toaster
