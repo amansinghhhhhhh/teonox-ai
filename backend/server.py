@@ -13,7 +13,7 @@ Endpoints:
 
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
-from starlette.responses import Response
+from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -370,32 +370,13 @@ app.include_router(api_router)
 
 _cors_origins = [o.strip().rstrip("/") for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
 
-@app.middleware("http")
-async def cors_middleware(request: Request, call_next):
-    logger.info("CORS middleware: %s %s origin=%s", request.method, request.url.path, request.headers.get("origin", "none"))
-    if request.method == "OPTIONS":
-        resp = Response(status_code=204, headers=_cors_headers(request))
-        logger.info("OPTIONS response headers: %s", dict(resp.headers))
-        return resp
-    try:
-        response = await call_next(request)
-    except Exception as exc:
-        logger.exception("Request failed, still adding CORS headers")
-        response = Response(status_code=500, content="Internal Server Error")
-    for k, v in _cors_headers(request).items():
-        response.headers[k] = v
-    return response
-
-def _cors_headers(request: Request) -> dict:
-    origin = request.headers.get("origin", "")
-    allow = origin if origin in _cors_origins or "*" in _cors_origins else (_cors_origins[0] if _cors_origins else "*")
-    logger.info("CORS headers: origin=%s allow=%s cors_origins=%s", origin, allow, _cors_origins)
-    return {
-        "Access-Control-Allow-Origin": allow,
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Visitor-Id, X-AI-Access-Token",
-        "Access-Control-Allow-Credentials": "true",
-    }
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("shutdown")
