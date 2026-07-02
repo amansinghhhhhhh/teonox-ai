@@ -38,7 +38,7 @@ load_dotenv(ROOT_DIR / ".env")
 
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url)
+client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
 # App + routers
