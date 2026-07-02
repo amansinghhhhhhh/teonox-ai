@@ -241,7 +241,10 @@ async def list_leads(limit: int = 100):
 async def consultant_message(payload: ConsultantTurnIn, request: Request):
     session_id = payload.session_id or f"consultant-{uuid.uuid4()}"
     if payload.is_first_turn and _is_underqualified_consultant_message(payload.message):
-        usage = await usage_snapshot(db, request, "consultant")
+        try:
+            usage = await usage_snapshot(db, request, "consultant")
+        except Exception:
+            usage = {"kind": "consultant", "limit": 999, "remaining": 999, "lead_required": False}
         return {
             "session_id": session_id,
             "attempts": 0,
@@ -256,6 +259,9 @@ async def consultant_message(payload: ConsultantTurnIn, request: Request):
         usage = await check_and_record_ai_usage(db, request, "consultant", payload.message)
     except AIUsageError as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail())
+    except Exception:
+        logger.warning("MongoDB unavailable, skipping usage check")
+        usage = {"kind": "consultant", "limit": 999, "remaining": 999, "lead_required": False}
 
     try:
         result = await consultant_turn(
@@ -306,7 +312,10 @@ async def job_risk_message(payload: JobRiskTurnIn, request: Request):
         role_missing = _is_underqualified_job_role(payload.role or "")
         task_missing = _is_underqualified_job_risk_message(payload.message)
         if role_missing or task_missing:
-            usage = await usage_snapshot(db, request, "job_risk")
+            try:
+                usage = await usage_snapshot(db, request, "job_risk")
+            except Exception:
+                usage = {"kind": "job_risk", "limit": 999, "remaining": 999, "lead_required": False}
             assistant_message = (
                 "Tell me your role first, like social media manager or accounts executive, then share 2-3 daily tasks. Then I can give you a useful risk read."
                 if role_missing
@@ -326,6 +335,9 @@ async def job_risk_message(payload: JobRiskTurnIn, request: Request):
         usage = await check_and_record_ai_usage(db, request, "job_risk", payload.message)
     except AIUsageError as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail())
+    except Exception:
+        logger.warning("MongoDB unavailable, skipping usage check")
+        usage = {"kind": "job_risk", "limit": 999, "remaining": 999, "lead_required": False}
 
     try:
         result = await job_risk_turn(
