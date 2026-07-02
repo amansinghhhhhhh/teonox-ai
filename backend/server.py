@@ -372,9 +372,16 @@ _cors_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",
 
 @app.middleware("http")
 async def cors_middleware(request: Request, call_next):
+    logger.info("CORS middleware: %s %s origin=%s", request.method, request.url.path, request.headers.get("origin", "none"))
     if request.method == "OPTIONS":
-        return Response(status_code=204, headers=_cors_headers(request))
-    response = await call_next(request)
+        resp = Response(status_code=204, headers=_cors_headers(request))
+        logger.info("OPTIONS response headers: %s", dict(resp.headers))
+        return resp
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        logger.exception("Request failed, still adding CORS headers")
+        response = Response(status_code=500, content="Internal Server Error")
     for k, v in _cors_headers(request).items():
         response.headers[k] = v
     return response
@@ -382,6 +389,7 @@ async def cors_middleware(request: Request, call_next):
 def _cors_headers(request: Request) -> dict:
     origin = request.headers.get("origin", "")
     allow = origin if origin in _cors_origins or "*" in _cors_origins else (_cors_origins[0] if _cors_origins else "*")
+    logger.info("CORS headers: origin=%s allow=%s cors_origins=%s", origin, allow, _cors_origins)
     return {
         "Access-Control-Allow-Origin": allow,
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
