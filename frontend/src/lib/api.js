@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-export const API_BASE = `${BACKEND_URL}/api`;
+const BACKEND_URL =
+    process.env.REACT_APP_BACKEND_URL || "http://localhost:8000";
+const API_BASE = `${BACKEND_URL}/api`;
+
 const VISITOR_ID_KEY = 'teonox_visitor_id';
 const AI_ACCESS_TOKEN_KEY = 'teonox_ai_access_token';
 
