@@ -368,7 +368,7 @@ async def job_risk_reset(payload: ResetSessionIn):
 # Include router
 app.include_router(api_router)
 
-_cors_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
+_cors_origins = [o.strip().rstrip("/") for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
 
 @app.middleware("http")
 async def cors_middleware(request: Request, call_next):
