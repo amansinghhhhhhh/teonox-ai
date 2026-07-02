@@ -13,7 +13,7 @@ Endpoints:
 
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import Response
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -368,13 +368,26 @@ async def job_risk_reset(payload: ResetSessionIn):
 # Include router
 app.include_router(api_router)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+_cors_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()]
+
+@app.middleware("http")
+async def cors_middleware(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return Response(status_code=204, headers=_cors_headers(request))
+    response = await call_next(request)
+    for k, v in _cors_headers(request).items():
+        response.headers[k] = v
+    return response
+
+def _cors_headers(request: Request) -> dict:
+    origin = request.headers.get("origin", "")
+    allow = origin if origin in _cors_origins or "*" in _cors_origins else (_cors_origins[0] if _cors_origins else "*")
+    return {
+        "Access-Control-Allow-Origin": allow,
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Visitor-Id, X-AI-Access-Token",
+        "Access-Control-Allow-Credentials": "true",
+    }
 
 
 @app.on_event("shutdown")
