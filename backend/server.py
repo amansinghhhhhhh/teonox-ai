@@ -41,7 +41,7 @@ load_dotenv(ROOT_DIR / ".env")
 
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tlsAllowInvalidCertificates=True)
+client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tlsInsecure=True)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
 # SMTP
@@ -79,7 +79,8 @@ def send_thankyou_email(to_email: str, name: str):
             msg["Subject"] = THANKYOU_SUBJECT
             msg["From"] = SMTP_CONFIG["from"]
             msg["To"] = to_email
-            with smtplib.SMTP_SSL(SMTP_CONFIG["host"], SMTP_CONFIG["port"]) as s:
+            with smtplib.SMTP(SMTP_CONFIG["host"], SMTP_CONFIG["port"], timeout=10) as s:
+                s.starttls()
                 s.login(SMTP_CONFIG["user"], SMTP_CONFIG["pass"])
                 s.send_message(msg)
             logger.info("Thank-you email sent to %s", to_email)
