@@ -19,6 +19,9 @@ import os
 import logging
 import re
 import uuid
+import smtplib
+import threading
+from email.mime.text import MIMEText
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Optional, Literal, Any, Dict
@@ -40,6 +43,51 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
+
+# SMTP
+SMTP_CONFIG = {
+    "host": os.environ.get("SMTP_HOST"),
+    "port": int(os.environ.get("SMTP_PORT", "465")),
+    "user": os.environ.get("SMTP_USER"),
+    "pass": os.environ.get("SMTP_PASS"),
+    "from": os.environ.get("SMTP_FROM"),
+}
+
+THANKYOU_SUBJECT = "Thank you for your interest \u2013 Team Teonox AI"
+THANKYOU_BODY = """Hi {name},
+
+Thank you for showing your interest in our course.
+
+We've successfully noted your interest. As soon as the course goes live, we'll notify you via email with all the details, including how you can get started.
+
+We're excited to have you with us and look forward to sharing this journey with you.
+
+If you have any questions in the meantime, feel free to reach out to us.
+
+Best regards,
+Team Teonox AI"""
+
+
+def send_thankyou_email(to_email: str, name: str):
+    if not SMTP_CONFIG["host"]:
+        logger.info("SMTP not configured, skipping email")
+        return
+
+    def _send():
+        try:
+            msg = MIMEText(THANKYOU_BODY.format(name=name), _charset="utf-8")
+            msg["Subject"] = THANKYOU_SUBJECT
+            msg["From"] = SMTP_CONFIG["from"]
+            msg["To"] = to_email
+            with smtplib.SMTP_SSL(SMTP_CONFIG["host"], SMTP_CONFIG["port"]) as s:
+                s.login(SMTP_CONFIG["user"], SMTP_CONFIG["pass"])
+                s.send_message(msg)
+            logger.info("Thank-you email sent to %s", to_email)
+        except Exception:
+            logger.warning("Failed to send thank-you email to %s", to_email, exc_info=True)
+
+    threading.Thread(target=_send, daemon=True).start()
+
 
 # App + routers
 app = FastAPI(title="Teonox.ai API")
@@ -210,6 +258,7 @@ async def create_lead(payload: LeadCreate):
         "created_at": now.isoformat(),
     }
     await db.leads.insert_one(doc)
+    send_thankyou_email(to_email=doc["email"], name=doc["name"])
     ai_access_token = create_ai_access_token(
         lead_id=lead_id,
         email=doc["email"],

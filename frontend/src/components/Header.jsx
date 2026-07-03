@@ -39,7 +39,7 @@ export const Header = ({ onOpenMasterclass }) => {
                     : 'bg-transparent border-b border-transparent',
             )}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 h-16 flex items-center justify-between gap-3">
                 <Link to="/" className="flex items-center focus-ring" aria-label="Teonox.ai home">
                     <TeonoxLogo variant="light" size={28} />
                 </Link>

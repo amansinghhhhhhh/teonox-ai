@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowRight,
     GraduationCap,
@@ -97,10 +98,45 @@ const CHAPTERS = [
     },
 ];
 
+const REVIEWS = [
+    {
+        initials: 'P',
+        name: 'Priya, Mumbai',
+        role: 'Pre-cohort tester · SMM lead',
+        text: 'Finally a class that didn\'t feel like another YouTube tutorial. We built a working captioning bot in 60 minutes — with a workflow I still use every Monday.',
+    },
+    {
+        initials: 'R',
+        name: 'Rajesh, Bangalore',
+        role: 'Sr. Content Strategist',
+        text: 'The prompt frameworks alone saved my team 12 hours a week. I walked in skeptical, walked out with a Notion template I use daily.',
+    },
+    {
+        initials: 'A',
+        name: 'Ananya, Pune',
+        role: 'D2C brand founder',
+        text: 'Built my entire email funnel during the session — from welcome sequence to abandoned cart. That\'s 3 months of work in 90 minutes.',
+    },
+    {
+        initials: 'V',
+        name: 'Vikram, Gurgaon',
+        role: 'Product Manager',
+        text: 'Finally understood how AI agents actually work in production. The agent recipe templates alone are worth the entire session.',
+    },
+    {
+        initials: 'N',
+        name: 'Neha, Hyderabad',
+        role: 'UI/UX Designer',
+        text: 'The Figma + AI workflow demo was an eye-opener. I\'ve already used it to cut my wireframing time by half.',
+    },
+];
+
 export default function HomePage() {
     useGsapReady();
     const { open: openMasterclass } = useMasterclass();
     const storyRef = useRef(null);
+    const rightRef = useRef(null);
+    const activeRef = useRef('01');
     const [activeChapter, setActiveChapter] = useState('01');
 
     useEffect(() => {
@@ -131,34 +167,68 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        const right = document.getElementById('story-right');
-        if (!right) return;
-        const cards = right.querySelectorAll('[data-chapter]');
-        if (!cards.length) return;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                let best = activeChapter;
-                let bestRatio = 0;
-                for (const e of entries) {
-                    if (e.intersectionRatio > bestRatio) {
-                        bestRatio = e.intersectionRatio;
-                        best = e.target.getAttribute('data-chapter');
+        const cards = rightRef.current?.querySelectorAll('[data-chapter]');
+        if (!cards?.length) return;
+        let rafId;
+        const onScroll = () => {
+            if (rafId) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                let best = cards[0].getAttribute('data-chapter');
+                let bestVisible = 0;
+                for (const card of cards) {
+                    const rect = card.getBoundingClientRect();
+                    const visible = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+                    if (visible > bestVisible) {
+                        bestVisible = visible;
+                        best = card.getAttribute('data-chapter');
                     }
                 }
-                if (best) setActiveChapter(best);
-            },
-            { rootMargin: '-80px 0px -40% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
-        );
-        cards.forEach((el) => observer.observe(el));
-        return () => observer.disconnect();
-    }, [activeChapter]);
+                const cur = activeRef.current;
+                if (best !== cur) {
+                    const curCard = rightRef.current?.querySelector(`[data-chapter="${cur}"]`);
+                    let curVisible = 0;
+                    if (curCard) {
+                        const r = curCard.getBoundingClientRect();
+                        curVisible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+                    }
+                    if (curVisible < bestVisible * 0.6) {
+                        activeRef.current = best;
+                        setActiveChapter(best);
+                    }
+                }
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, []);
+
+    const scrollToChapter = (n) => {
+        const el = rightRef.current?.querySelector(`[data-chapter="${n}"]`);
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const [reviewIdx, setReviewIdx] = useState(0);
+    const reviewPaused = useRef(false);
+    useEffect(() => {
+        const id = setInterval(() => {
+            if (!reviewPaused.current) {
+                setReviewIdx((i) => (i + 1) % REVIEWS.length);
+            }
+        }, 4000);
+        return () => clearInterval(id);
+    }, []);
 
     return (
         <>
             {/* ============================================================= HERO */}
             <section data-testid={HOME.hero} className="relative overflow-hidden">
                 <HeroOrbBackground dense />
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-32 pb-20 sm:pb-24">
+                <div className="relative z-10 max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 pt-14 sm:pt-16 lg:pt-20 pb-20 sm:pb-24">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                         <div className="lg:col-span-7">
                             <p className="text-[11px] sm:text-xs uppercase tracking-[0.32em] text-[#FF7A1A]">
@@ -306,7 +376,7 @@ export default function HomePage() {
 
             {/* =========================================================== SCROLL STORY */}
             <section data-testid={HOME.scrollStory} className="relative section-night py-20 sm:py-28">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="max-w-3xl">
                         <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">The story</p>
                         <Typewriter
@@ -317,37 +387,53 @@ export default function HomePage() {
                             trailingCaret
                         />
                         <p className="text-ink-2 mt-5 max-w-2xl">
-                            A short scroll through how Teonox.ai reframes AI learning — from “too many tools” to a clean,
+                            A short scroll through how Teonox.ai reframes AI learning — from "too many tools" to a clean,
                             confident, role-specific path.
                         </p>
                     </div>
 
                     <div ref={storyRef} className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-6">
                         <div className="lg:col-span-3">
-                            <div className="lg:sticky lg:top-28 space-y-1">
+                            <div className="lg:sticky lg:top-28 relative flex flex-col">
+                                <div className="absolute left-[11px] top-3 bottom-3 w-px bg-white/8" />
                                 {CHAPTERS.map((c) => {
                                     const isActive = activeChapter === c.n;
+                                    const idx = CHAPTERS.findIndex((x) => x.n === c.n);
+                                    const activeIdx = CHAPTERS.findIndex((x) => x.n === activeChapter);
+                                    const passed = idx < activeIdx;
                                     return (
-                                        <div
+                                        <button
                                             key={c.n}
-                                            className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm border transition-all duration-300 ${
+                                            type="button"
+                                            onClick={() => scrollToChapter(c.n)}
+                                            className={`relative flex items-center gap-4 rounded-xl px-3 py-2.5 text-sm border transition-all duration-500 text-left w-full ${
                                                 isActive
-                                                    ? 'bg-white/10 border-[#E85F00]/40 text-white font-medium shadow-[inset_0_0_0_1px_rgba(232,95,0,0.25)]'
-                                                    : 'bg-white/3 border-white/6 text-ink-4 opacity-60'
+                                                    ? 'bg-white/10 border-[#E85F00]/35 text-white font-medium'
+                                                    : 'bg-transparent border-transparent text-ink-4 hover:text-ink-2'
                                             }`}
                                         >
-                                            <span className={`font-mono text-xs ${isActive ? 'text-[#FF7A1A]' : 'text-ink-4'}`}>
-                                                {c.n}
+                                            <span className="relative z-10 flex items-center justify-center w-5 h-5">
+                                                <span
+                                                    className={`absolute inset-0 rounded-full border transition-all duration-500 ${
+                                                        isActive
+                                                            ? 'border-[#E85F00] bg-[#E85F00] scale-100'
+                                                            : passed
+                                                              ? 'border-[#E85F00]/40 bg-[#E85F00]/20 scale-90'
+                                                              : 'border-white/20 bg-transparent scale-90'
+                                                    }`}
+                                                />
+                                                {isActive && <span className="relative z-10 w-1.5 h-1.5 rounded-full bg-white" />}
                                             </span>
-                                            <span className={isActive ? 'text-white' : ''}>{c.kicker}</span>
-                                            {isActive && <span className="ml-auto w-1 h-4 rounded-full bg-[#E85F00]" />}
-                                        </div>
+                                            <span className={`transition-all duration-500 ${isActive ? 'opacity-100 translate-x-0' : 'opacity-60 -translate-x-1'}`}>
+                                                {c.kicker}
+                                            </span>
+                                        </button>
                                     );
                                 })}
                             </div>
                         </div>
 
-                        <div id="story-right" className="lg:col-span-9 space-y-6">
+                        <div ref={rightRef} className="lg:col-span-9 space-y-6">
                             {CHAPTERS.map((c) => {
                                 const Icon = c.icon;
                                 return (
@@ -380,7 +466,7 @@ export default function HomePage() {
 
             {/* =========================================================== COURSES PEEK */}
             <section className="section-deep py-20 sm:py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="flex items-end justify-between gap-6 flex-wrap">
                         <div>
                             <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">7 pilot courses</p>
@@ -410,9 +496,12 @@ export default function HomePage() {
                                 </div>
                             );
                         })}
-                        <Link to="/courses" className="col-span-2 md:col-span-1 tilt card-elev rounded-2xl p-5 flex items-center justify-between gap-3 hover:border-[#E85F00]/40">
-                            <div className="text-sm font-medium text-white">Explore all</div>
-                            <ArrowUpRight className="w-5 h-5 text-[#FF7A1A]" />
+                        <Link to="/courses" className="col-span-2 md:col-span-1 group rounded-2xl p-5 flex flex-col justify-between bg-gradient-to-br from-[#EF7A17] to-[#E85F00] shadow-[0_0_20px_rgba(239,122,23,0.3)] hover:shadow-[0_0_32px_rgba(239,122,23,0.5)] hover:brightness-105 transition-all duration-400">
+                            <div className="flex items-start justify-between">
+                                <div className="text-base font-semibold text-white">Explore all courses</div>
+                                <ArrowUpRight className="w-5 h-5 text-white transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </div>
+                            <div className="text-xs text-white/70 mt-2">7 role-based AI paths</div>
                         </Link>
                     </RevealOnScroll>
                 </div>
@@ -420,7 +509,7 @@ export default function HomePage() {
 
             {/* =========================================================== MASTERCLASS */}
             <section data-testid={HOME.masterclassSection} className="relative section-night py-20 sm:py-24">
-                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="relative overflow-hidden rounded-3xl bg-card border border-white/8 p-8 sm:p-12">
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                             <div className="lg:col-span-7">
@@ -461,23 +550,54 @@ export default function HomePage() {
                                 </MagneticButton>
                             </div>
                             <div className="lg:col-span-5">
-                                <div className="rounded-2xl bg-[#0C1430] border border-white/8 p-6">
+                                <div
+                                    className="rounded-2xl bg-[#0C1430] border border-white/8 p-6"
+                                    onMouseEnter={() => { reviewPaused.current = true; }}
+                                    onMouseLeave={() => { reviewPaused.current = false; }}
+                                >
                                     <Quote className="w-6 h-6 text-[#FFA362]" />
-                                    <p className="text-white/90 mt-3 leading-relaxed">
-                                        Finally a class that didn&apos;t feel like another YouTube tutorial. We built a working
-                                        captioning bot in 60 minutes — with a workflow I still use every Monday.
-                                    </p>
-                                    <div className="mt-5 flex items-center gap-3">
-                                        <div className="w-9 h-9 rounded-full bg-[#E85F00] grid place-items-center text-white font-semibold">P</div>
-                                        <div>
-                                            <div className="text-sm font-semibold text-white">Priya, Mumbai</div>
-                                            <div className="text-xs text-ink-3">Pre-cohort tester · SMM lead</div>
-                                        </div>
-                                        <div className="ml-auto flex items-center gap-0.5">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Star key={i} className="w-3.5 h-3.5 fill-[#FFA362] text-[#FFA362]" />
-                                            ))}
-                                        </div>
+                                    <div className="relative min-h-[120px]">
+                                        <AnimatePresence mode="wait">
+                                            <motion.div
+                                                key={reviewIdx}
+                                                initial={{ opacity: 0, y: 12 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -12 }}
+                                                transition={{ duration: 0.35, ease: 'easeInOut' }}
+                                            >
+                                                <p className="text-white/90 mt-3 leading-relaxed">
+                                                    {REVIEWS[reviewIdx].text}
+                                                </p>
+                                                <div className="mt-5 flex items-center gap-3">
+                                                    <div className="w-9 h-9 rounded-full bg-[#E85F00] grid place-items-center text-white font-semibold">
+                                                        {REVIEWS[reviewIdx].initials}
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-sm font-semibold text-white">{REVIEWS[reviewIdx].name}</div>
+                                                        <div className="text-xs text-ink-3">{REVIEWS[reviewIdx].role}</div>
+                                                    </div>
+                                                    <div className="ml-auto flex items-center gap-0.5">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star key={i} className="w-3.5 h-3.5 fill-[#FFA362] text-[#FFA362]" />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </AnimatePresence>
+                                    </div>
+                                    <div className="mt-4 flex items-center justify-center gap-1.5">
+                                        {REVIEWS.map((_, i) => (
+                                            <button
+                                                key={i}
+                                                type="button"
+                                                onClick={() => setReviewIdx(i)}
+                                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                                    i === reviewIdx
+                                                        ? 'bg-[#FFA362] w-4'
+                                                        : 'bg-white/20 hover:bg-white/40'
+                                                }`}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             </div>

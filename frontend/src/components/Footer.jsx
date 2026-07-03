@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TeonoxLogo } from './TeonoxLogo';
 import { NAV } from '@/constants/testIds';
 import { Mail, MessageCircle, MapPin, ArrowUpRight } from 'lucide-react';
+
+const TAGLINES = [
+    <>AI seekhna hai. <span className="gradient-orange-text">Asli kaam karna hai.</span></>,
+    <>Learn AI. Master the tools. <span className="gradient-orange-text">Build real solutions.</span></>,
+];
 
 const LINKS = [
     { label: 'Home', to: '/' },
@@ -13,14 +19,34 @@ const LINKS = [
 ];
 
 export const Footer = ({ onOpenMasterclass }) => {
+    const [tagIdx, setTagIdx] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTagIdx((prev) => (prev + 1) % TAGLINES.length);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, []);
+
     return (
         <footer data-testid={NAV.footer} className="relative section-deep border-t border-white/8 noise-overlay">
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
+            <div className="relative z-10 max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 py-8 sm:py-10">
                 {/* Big closing line */}
                 <div className="max-w-3xl">
                     <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">Learn. Apply. Lead.</p>
                     <h2 className="font-display mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.05] text-white">
-                        AI seekhna hai. <span className="gradient-orange-text">Asli kaam karna hai.</span>
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={tagIdx}
+                                className="block"
+                                initial={{ opacity: 0, y: 28 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -28 }}
+                                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                            >
+                                {TAGLINES[tagIdx]}
+                            </motion.span>
+                        </AnimatePresence>
                     </h2>
                     <button
                         onClick={onOpenMasterclass}
