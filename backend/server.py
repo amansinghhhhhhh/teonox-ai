@@ -19,9 +19,8 @@ import os
 import logging
 import re
 import uuid
-import smtplib
+import ssl
 import threading
-from email.mime.text import MIMEText
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import List, Optional, Literal, Any, Dict
@@ -41,17 +40,15 @@ load_dotenv(ROOT_DIR / ".env")
 
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tlsAllowInvalidCertificates=True)
+ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+ssl_ctx.check_hostname = False
+ssl_ctx.verify_mode = ssl.CERT_NONE
+client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, ssl_context=ssl_ctx)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
-# SMTP
-SMTP_CONFIG = {
-    "host": os.environ.get("SMTP_HOST"),
-    "port": int(os.environ.get("SMTP_PORT", "465")),
-    "user": os.environ.get("SMTP_USER"),
-    "pass": os.environ.get("SMTP_PASS"),
-    "from": os.environ.get("SMTP_FROM"),
-}
+# SendGrid
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+SENDER_EMAIL = os.environ.get("SMTP_FROM", "noreply@teonox.ai")
 
 THANKYOU_SUBJECT = "Thank you for your interest \u2013 Team Teonox AI"
 THANKYOU_BODY = """Hi {name},
@@ -69,20 +66,22 @@ Team Teonox AI"""
 
 
 def send_thankyou_email(to_email: str, name: str):
-    if not SMTP_CONFIG["host"]:
-        logger.info("SMTP not configured, skipping email")
+    if not SENDGRID_API_KEY:
+        logger.info("SendGrid not configured, skipping email")
         return
 
     def _send():
         try:
-            msg = MIMEText(THANKYOU_BODY.format(name=name), _charset="utf-8")
-            msg["Subject"] = THANKYOU_SUBJECT
-            msg["From"] = SMTP_CONFIG["from"]
-            msg["To"] = to_email
-            with smtplib.SMTP(SMTP_CONFIG["host"], SMTP_CONFIG["port"], timeout=10) as s:
-                s.starttls()
-                s.login(SMTP_CONFIG["user"], SMTP_CONFIG["pass"])
-                s.send_message(msg)
+            from sendgrid import SendGridAPIClient
+            from sendgrid.helpers.mail import Mail
+            message = Mail(
+                from_email=SENDER_EMAIL,
+                to_emails=to_email,
+                subject=THANKYOU_SUBJECT,
+                plain_text_content=THANKYOU_BODY.format(name=name),
+            )
+            sg = SendGridAPIClient(SENDGRID_API_KEY)
+            sg.send(message)
             logger.info("Thank-you email sent to %s", to_email)
         except Exception:
             logger.warning("Failed to send thank-you email to %s", to_email, exc_info=True)
