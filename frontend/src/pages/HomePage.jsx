@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
     ArrowRight,
@@ -101,6 +101,7 @@ export default function HomePage() {
     useGsapReady();
     const { open: openMasterclass } = useMasterclass();
     const storyRef = useRef(null);
+    const [activeChapter, setActiveChapter] = useState('01');
 
     useEffect(() => {
         if (!storyRef.current) return;
@@ -128,6 +129,29 @@ export default function HomePage() {
         }, storyRef);
         return () => ctx.revert();
     }, []);
+
+    useEffect(() => {
+        const right = document.getElementById('story-right');
+        if (!right) return;
+        const cards = right.querySelectorAll('[data-chapter]');
+        if (!cards.length) return;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                let best = activeChapter;
+                let bestRatio = 0;
+                for (const e of entries) {
+                    if (e.intersectionRatio > bestRatio) {
+                        bestRatio = e.intersectionRatio;
+                        best = e.target.getAttribute('data-chapter');
+                    }
+                }
+                if (best) setActiveChapter(best);
+            },
+            { rootMargin: '-80px 0px -40% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] },
+        );
+        cards.forEach((el) => observer.observe(el));
+        return () => observer.disconnect();
+    }, [activeChapter]);
 
     return (
         <>
@@ -300,20 +324,30 @@ export default function HomePage() {
 
                     <div ref={storyRef} className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-6">
                         <div className="lg:col-span-3">
-                            <div className="lg:sticky lg:top-28 space-y-2">
-                                {CHAPTERS.map((c) => (
-                                    <div
-                                        key={c.n}
-                                        className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-ink-2 border border-white/6 bg-white/3"
-                                    >
-                                        <span className="font-mono text-[#FF7A1A]">{c.n}</span>
-                                        <span>{c.kicker}</span>
-                                    </div>
-                                ))}
+                            <div className="lg:sticky lg:top-28 space-y-1">
+                                {CHAPTERS.map((c) => {
+                                    const isActive = activeChapter === c.n;
+                                    return (
+                                        <div
+                                            key={c.n}
+                                            className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm border transition-all duration-300 ${
+                                                isActive
+                                                    ? 'bg-white/10 border-[#E85F00]/40 text-white font-medium shadow-[inset_0_0_0_1px_rgba(232,95,0,0.25)]'
+                                                    : 'bg-white/3 border-white/6 text-ink-4 opacity-60'
+                                            }`}
+                                        >
+                                            <span className={`font-mono text-xs ${isActive ? 'text-[#FF7A1A]' : 'text-ink-4'}`}>
+                                                {c.n}
+                                            </span>
+                                            <span className={isActive ? 'text-white' : ''}>{c.kicker}</span>
+                                            {isActive && <span className="ml-auto w-1 h-4 rounded-full bg-[#E85F00]" />}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        <div className="lg:col-span-9 space-y-6">
+                        <div id="story-right" className="lg:col-span-9 space-y-6">
                             {CHAPTERS.map((c) => {
                                 const Icon = c.icon;
                                 return (
