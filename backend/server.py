@@ -43,7 +43,7 @@ mongo_url = os.environ["MONGO_URL"]
 ssl_ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 ssl_ctx.check_hostname = False
 ssl_ctx.verify_mode = ssl.CERT_NONE
-client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, ssl_context=ssl_ctx)
+client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tls_context=ssl_ctx)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
 # SendGrid
