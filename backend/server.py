@@ -257,7 +257,10 @@ async def create_lead(payload: LeadCreate):
         "source": payload.source or "home_masterclass",
         "created_at": now.isoformat(),
     }
-    await db.leads.insert_one(doc)
+    try:
+        await db.leads.insert_one(doc)
+    except Exception:
+        logger.warning("MongoDB unavailable, lead not persisted but email will still be sent")
     send_thankyou_email(to_email=doc["email"], name=doc["name"])
     ai_access_token = create_ai_access_token(
         lead_id=lead_id,
