@@ -82,7 +82,7 @@ def send_thankyou_email(to_email: str, name: str):
             sg.send(message)
             logger.info("Thank-you email sent to %s", to_email)
         except Exception:
-            logger.warning("Failed to send thank-you email to %s", to_email, exc_info=True)
+            logger.warning("Failed to send thank-you email to %s. Verify '%s' is a verified sender in SendGrid dashboard (Settings > Sender Authentication > Single Sender Verification).", to_email, SENDER_EMAIL, exc_info=True)
 
     threading.Thread(target=_send, daemon=True).start()
 
