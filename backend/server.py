@@ -49,18 +49,46 @@ SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDER_EMAIL = os.environ.get("SMTP_FROM", "amansingh070823@gmail.com")
 
 THANKYOU_SUBJECT = "Thank you for your interest \u2013 Team Teonox AI"
-THANKYOU_BODY = """Hi {name},
-
-Thank you for showing your interest in our course.
-
-We've successfully noted your interest. As soon as the course goes live, we'll notify you via email with all the details, including how you can get started.
-
-We're excited to have you with us and look forward to sharing this journey with you.
-
-If you have any questions in the meantime, feel free to reach out to us.
-
-Best regards,
-Team Teonox AI"""
+THANKYOU_BODY = """<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { margin:0; padding:0; font-family:Inter, system-ui, -apple-system, sans-serif; background:#f5f5f5; }
+    .btn { display:inline-block; padding:13px 30px; background:linear-gradient(135deg,#EF7A17 0%,#E85F00 100%); color:#fff !important; text-decoration:none; border-radius:12px; font-size:15px; font-weight:600; }
+    .social a { color:#E85F00; text-decoration:none; font-size:14px; font-weight:500; margin:0 4px; }
+  </style>
+</head>
+<body>
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;margin:24px auto;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <tr><td style="padding:36px 28px 28px;">
+      <h1 style="font-size:22px;font-weight:800;margin:0;letter-spacing:-0.3px;color:#111;">TEONOX AI</h1>
+      <p style="font-size:12px;font-weight:600;color:#E85F00;letter-spacing:1.2px;text-transform:uppercase;margin:2px 0 0;">Learn. Apply. Lead.</p>
+      <div style="height:1px;background:#e8e8e8;margin:20px 0;"></div>
+      <p style="font-size:16px;font-weight:600;margin:0 0 8px;color:#111;">Hey {name}! 👋</p>
+      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">You just took the first step toward building real AI skills.</p>
+      <div style="background:#fafafa;border-left:3px solid #E85F00;border-radius:6px;padding:14px 16px;margin:0 0 20px;font-size:14px;color:#444;line-height:1.7;">
+        ✅ <strong>Interest noted:</strong> AI Chatbots Masterclass<br>
+        📩 We&rsquo;ll email you the moment it goes live.
+      </div>
+      <p style="font-size:14px;color:#666;margin:0 0 8px;">Follow us on social media:</p>
+      <p class="social" style="margin:0 0 24px;font-size:0;">
+        <a href="#">Instagram</a>
+        <span style="color:#ccc;margin:0 2px;">&middot;</span>
+        <a href="#">Facebook</a>
+        <span style="color:#ccc;margin:0 2px;">&middot;</span>
+        <a href="#">Twitter / X</a>
+        <span style="color:#ccc;margin:0 2px;">&middot;</span>
+        <a href="#">LinkedIn</a>
+      </p>
+      <a class="btn" href="https://teonox.ai/courses">Explore all courses &rarr;</a>
+      <div style="height:1px;background:#e8e8e8;margin:24px 0 16px;"></div>
+      <p style="font-size:13px;color:#999;line-height:1.5;margin:0;">Keep learning,<br><strong style="color:#555;">Team Teonox AI</strong></p>
+    </td></tr>
+  </table>
+</body>
+</html>"""
 
 
 def send_thankyou_email(to_email: str, name: str):
@@ -76,7 +104,7 @@ def send_thankyou_email(to_email: str, name: str):
                 from_email=SENDER_EMAIL,
                 to_emails=to_email,
                 subject=THANKYOU_SUBJECT,
-                plain_text_content=THANKYOU_BODY.format(name=name),
+                html_content=THANKYOU_BODY.format(name=name),
             )
             sg = SendGridAPIClient(SENDGRID_API_KEY)
             sg.send(message)
