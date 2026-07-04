@@ -67,7 +67,10 @@ THANKYOU_BODY = """<!DOCTYPE html>
       <p style="font-size:12px;font-weight:600;color:#E85F00;letter-spacing:1.2px;text-transform:uppercase;margin:2px 0 0;">Learn. Apply. Lead.</p>
       <div style="height:1px;background:#e8e8e8;margin:20px 0;"></div>
       <p style="font-size:16px;font-weight:600;margin:0 0 8px;color:#111;">Hey {name}! 👋</p>
-      <p style="font-size:15px;line-height:1.6;color:#444;margin:0 0 16px;">You just took the first step toward building real AI skills.</p>
+      <p style="font-size:15px;line-height:1.8;color:#444;margin:0 0 16px;">Thank you for showing your interest in our course.</p>
+      <p style="font-size:15px;line-height:1.8;color:#444;margin:0 0 8px;">We've successfully noted your interest. As soon as the course goes live, we'll notify you via email with all the details, including how you can get started.</p>
+      <p style="font-size:15px;line-height:1.8;color:#444;margin:0 0 8px;">We're excited to have you with us and look forward to sharing this journey with you.</p>
+      <p style="font-size:15px;line-height:1.8;color:#444;margin:0 0 16px;">If you have any questions in the meantime, feel free to reach out to us.</p>
       <div style="background:#fafafa;border-left:3px solid #E85F00;border-radius:6px;padding:14px 16px;margin:0 0 20px;font-size:14px;color:#444;line-height:1.7;">
         ✅ <strong>Interest noted:</strong> AI Chatbots Masterclass<br>
         📩 We&rsquo;ll email you the moment it goes live.
