@@ -21,7 +21,7 @@ export default function JobRiskPage() {
     return (
         <div data-testid={JOBRISK.page} className="section-deep">
             <section className="pt-20 sm:pt-24 pb-8">
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+                <div className="relative max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
                     <div className="lg:col-span-8">
                         <Badge className="bg-rose-500/15 text-rose-200 border border-rose-500/30 hover:bg-rose-500/15">
                             <ShieldAlert className="w-3.5 h-3.5 mr-1" />
@@ -57,13 +57,13 @@ export default function JobRiskPage() {
             </section>
 
             <section className="py-8 sm:py-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <JobRiskChat courses={courses} />
                 </div>
             </section>
 
             <section className="section-night py-14 sm:py-20">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                             <div className="lg:col-span-8">

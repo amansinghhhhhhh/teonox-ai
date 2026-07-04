@@ -217,7 +217,7 @@ export default function ResultsPage() {
     return (
         <div data-testid={RESULTS.page} className="section-deep">
             <section className="pt-20 sm:pt-24 pb-10">
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <Badge className="bg-[#E85F00] hover:bg-[#E85F00] text-white border-0">Real outcomes</Badge>
                     <Typewriter
                         as="h1"
@@ -243,7 +243,7 @@ export default function ResultsPage() {
 
             {/* Stories */}
             <section className="py-8 sm:py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-14">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 space-y-10 sm:space-y-14">
                     {STORIES.map((s, idx) => {
                         const RoleIcon = s.icon;
                         return (
@@ -350,7 +350,7 @@ export default function ResultsPage() {
 
             {/* CTA */}
             <section className="section-night py-16 sm:py-20">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                             <div className="lg:col-span-8">

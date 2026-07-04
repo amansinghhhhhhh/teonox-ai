@@ -26,7 +26,7 @@ export default function CoursesPage() {
     return (
         <div data-testid={COURSES.page} className="section-deep">
             <section className="pt-20 sm:pt-24 pb-8 sm:pb-10">
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <Badge className="bg-[#E85F00] hover:bg-[#E85F00] text-white border-0">Explore Courses</Badge>
                     <Typewriter
                         as="h1"
@@ -51,7 +51,7 @@ export default function CoursesPage() {
             </section>
 
             <section className="pb-20 sm:pb-28">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <Tabs value={tab} onValueChange={setTab} data-testid={COURSES.viewToggle}>
                         <TabsList className="bg-white/5 border border-white/8 rounded-xl p-1">
                             <TabsTrigger

@@ -82,7 +82,7 @@ export default function GapPage() {
         <div data-testid={GAP.page} className="section-deep">
             {/* HERO */}
             <section className="relative overflow-hidden pt-20 sm:pt-24 pb-12 sm:pb-16">
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+                <div className="relative max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
                     <div className="lg:col-span-8">
                         <Badge className="bg-[#E85F00] hover:bg-[#E85F00] text-white border-0">The Gap</Badge>
                         <Typewriter
@@ -119,7 +119,7 @@ export default function GapPage() {
 
             {/* COMPARISON */}
             <section className="section-night py-16 sm:py-20">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <RevealOnScroll className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {FAILURE_MODES.map((f) => {
                             const Icon = f.icon;
@@ -202,7 +202,7 @@ export default function GapPage() {
 
             {/* AUDIENCE BENTO */}
             <section className="section-deep py-20 sm:py-24">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <p className="text-xs uppercase tracking-[0.22em] text-[#FF7A1A]">Built for you</p>
                     <Typewriter
                         as="h2"
@@ -243,7 +243,7 @@ export default function GapPage() {
 
             {/* CTA */}
             <section className="section-night py-16 sm:py-20">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl xl:max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16 2xl:px-24">
                     <div className="rounded-3xl bg-card border border-white/8 p-8 sm:p-12">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                             <div className="lg:col-span-8">
