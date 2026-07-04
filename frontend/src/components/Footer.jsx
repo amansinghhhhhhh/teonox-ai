@@ -74,7 +74,7 @@ export const Footer = ({ onOpenMasterclass }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-10">
                     <div className="md:col-span-5">
-                        <TeonoxLogo variant="light" size={32} />
+                        <TeonoxLogo variant="light" size={40} />
                         <p className="mt-4 text-white/65 max-w-md">
                             Job-ready AI skills for students, professionals, business owners and parents. We teach the
                             workflows companies actually use — not just tools, but the systems behind them.

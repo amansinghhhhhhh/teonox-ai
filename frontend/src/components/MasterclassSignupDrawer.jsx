@@ -46,7 +46,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
         try {
             await createLead({ ...form, source, form_started_at: formStartedAt });
             setSuccess(true);
-            toast.success('You\u2019re in! Check WhatsApp for the joining link.');
+            toast.success('You\u2019re in! Check email.');
         } catch (err) {
             console.error(err);
             toast.error('Something went wrong. Please try again.');
@@ -102,7 +102,7 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 </div>
                                 <h3 className="font-display text-xl font-semibold text-white">{'You\u2019re in!'}</h3>
                                 <p className="text-ink-2 mt-2">
-                                    {'We\u2019ll WhatsApp you the joining link + \u20b950k resources before the live class.'}
+                                    {'We\u2019ll send you the joining link + \u20b950k resources via email before the live class.'}
                                 </p>
                                 <Button onClick={() => handleOpenChange(false)} className="mt-5 bg-white text-[#0B0F14] hover:bg-[#FFA362] rounded-xl">
                                     Close
