@@ -41,12 +41,19 @@ load_dotenv(ROOT_DIR / ".env")
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
 mongo_url = re.sub(r'[?&]tls(?:AllowInvalidCertificates|Insecure)=true', '', mongo_url)
-client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tlsInsecure=True)
+client = AsyncIOMotorClient(
+    mongo_url,
+    serverSelectionTimeoutMS=3000,
+    tls=True,
+    tlsAllowInvalidCertificates=True,
+    tlsAllowInvalidHostnames=True,
+    ssl_version=ssl.PROTOCOL_TLSv1_2,
+)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
 # SendGrid
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
-SENDER_EMAIL = os.environ.get("SMTP_FROM", "noreply@teonox.ai")
+SENDER_EMAIL = os.environ.get("SMTP_FROM", "amansingh070823@gmail.com")
 
 THANKYOU_SUBJECT = "Thank you for your interest \u2013 Team Teonox AI"
 THANKYOU_BODY = """Hi {name},
