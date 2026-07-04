@@ -38,17 +38,13 @@ from usage_control import (
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
+# Force TLS 1.2 for MongoDB Atlas compatibility
+os.environ.setdefault("OPENSSL_CONF", str(ROOT_DIR / "openssl.cnf"))
+
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
 mongo_url = re.sub(r'[?&]tls(?:AllowInvalidCertificates|Insecure)=true', '', mongo_url)
-client = AsyncIOMotorClient(
-    mongo_url,
-    serverSelectionTimeoutMS=3000,
-    tls=True,
-    tlsAllowInvalidCertificates=True,
-    tlsAllowInvalidHostnames=True,
-    ssl_version=ssl.PROTOCOL_TLSv1_2,
-)
+client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=3000, tlsInsecure=True)
 db = client[os.environ.get("DB_NAME", "teonox_ai")]
 
 # SendGrid
