@@ -100,10 +100,12 @@ export const MasterclassSignupDrawer = ({ open, onOpenChange, source = 'home_mas
                                 <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center mb-3">
                                     <CheckCircle2 className="w-7 h-7 text-emerald-400" />
                                 </div>
-                                <h3 className="font-display text-xl font-semibold text-white">{'You\u2019re in!'}</h3>
-                                <p className="text-ink-2 mt-2">
-                                    {'We\u2019ll send you the joining link + \u20b950k resources via email before the live class.'}
-                                </p>
+                                <div className="text-left max-w-sm mx-auto space-y-3 text-sm text-ink-2 leading-relaxed">
+                                    <p>Thank you for showing your interest in our course.</p>
+                                    <p>We've successfully noted your interest. As soon as the course goes live, we'll notify you via email with all the details, including how you can get started.</p>
+                                    <p>We're excited to have you with us and look forward to sharing this journey with you.</p>
+                                    <p>If you have any questions in the meantime, feel free to reach out to us.</p>
+                                </div>
                                 <Button onClick={() => handleOpenChange(false)} className="mt-5 bg-white text-[#0B0F14] hover:bg-[#FFA362] rounded-xl">
                                     Close
                                 </Button>
