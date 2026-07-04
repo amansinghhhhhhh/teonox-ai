@@ -38,14 +38,6 @@ from usage_control import (
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
-# Force TLS 1.2 globally for MongoDB Atlas compatibility
-_ssl_init = ssl.SSLContext.__init__
-def _tls12_init(self, protocol=ssl.PROTOCOL_TLS_CLIENT, *args, **kwargs):
-    _ssl_init(self, protocol, *args, **kwargs)
-    self.minimum_version = ssl.TLSVersion.TLSv1_2
-    self.maximum_version = ssl.TLSVersion.TLSv1_2
-ssl.SSLContext.__init__ = _tls12_init
-
 # Mongo
 mongo_url = os.environ["MONGO_URL"]
 mongo_url = re.sub(r'[?&]tls(?:AllowInvalidCertificates|Insecure)=true', '', mongo_url)
