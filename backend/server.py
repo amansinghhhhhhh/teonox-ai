@@ -104,7 +104,7 @@ def send_thankyou_email(to_email: str, name: str):
                 from_email=SENDER_EMAIL,
                 to_emails=to_email,
                 subject=THANKYOU_SUBJECT,
-                html_content=THANKYOU_BODY.format(name=name),
+                html_content=THANKYOU_BODY.replace("{name}", name),
             )
             sg = SendGridAPIClient(SENDGRID_API_KEY)
             sg.send(message)
