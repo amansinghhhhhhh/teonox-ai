@@ -3,7 +3,15 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { TeonoxLogo } from "./TeonoxLogo";
 import { NAV } from "@/constants/testIds";
-import { Mail, MessageCircle, MapPin, ArrowUpRight, Facebook, Instagram, Twitter } from "lucide-react";
+import {
+  Mail,
+  MessageCircle,
+  MapPin,
+  ArrowUpRight,
+  Facebook,
+  Instagram,
+  Twitter,
+} from "lucide-react";
 
 const TAGLINES = [
   <>
@@ -107,7 +115,7 @@ export const Footer = ({ onOpenMasterclass }) => {
               </li>
               <li className="flex items-center gap-3">
                 <MessageCircle className="w-4 h-4 text-[#FF7A1A]" />
-                WhatsApp +91 8459394197
+                WhatsApp +91 8087177760
               </li>
               <li className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-[#FF7A1A]" />
@@ -123,13 +131,28 @@ export const Footer = ({ onOpenMasterclass }) => {
             © {new Date().getFullYear()} teonox.ai — Learn. Apply. Lead.
           </p>
           <div className="flex items-center gap-4">
-            <a href="https://www.facebook.com/teonox.aiofficial" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+            <a
+              href="https://www.facebook.com/teonox.aiofficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/45 hover:text-[#FF7A1A] transition-colors"
+            >
               <Facebook className="w-4 h-4" />
             </a>
-            <a href="https://www.instagram.com/teonox.ai/" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+            <a
+              href="https://www.instagram.com/teonox.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/45 hover:text-[#FF7A1A] transition-colors"
+            >
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="https://x.com/teonoxai" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+            <a
+              href="https://x.com/teonoxai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/45 hover:text-[#FF7A1A] transition-colors"
+            >
               <Twitter className="w-4 h-4" />
             </a>
           </div>
