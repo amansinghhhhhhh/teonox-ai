@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { TeonoxLogo } from "./TeonoxLogo";
 import { NAV } from "@/constants/testIds";
-import { Mail, MessageCircle, MapPin, ArrowUpRight } from "lucide-react";
+import { Mail, MessageCircle, MapPin, ArrowUpRight, Facebook, Instagram, Twitter } from "lucide-react";
 
 const TAGLINES = [
   <>
@@ -122,9 +122,17 @@ export const Footer = ({ onOpenMasterclass }) => {
           <p className="text-xs text-white/45">
             © {new Date().getFullYear()} teonox.ai — Learn. Apply. Lead.
           </p>
-          {/* <p className="text-xs text-white/45">
-            Built mobile-first for practical AI learning
-          </p> */}
+          <div className="flex items-center gap-4">
+            <a href="https://www.facebook.com/teonox.aiofficial" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+              <Facebook className="w-4 h-4" />
+            </a>
+            <a href="https://www.instagram.com/teonox.ai/" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a href="https://x.com/teonoxai" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[#FF7A1A] transition-colors">
+              <Twitter className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
